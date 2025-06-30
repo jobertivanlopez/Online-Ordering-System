@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'pages/landingpage.dart';
+import 'pages/landingPage.dart';
+import 'pages/OrderNow.dart';
 import 'pages/contactus.dart';
 import 'pages/notifications.dart';
 
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/landingpage': (context) => const Landingpage(),
         '/contactus': (context) => const ContactUs(),
+        '/OrderNow': (context)   => const  OrderNow(),
         '/notifications': (context) => const Notifications(),
       },
     );
