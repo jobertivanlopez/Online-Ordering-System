@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:online_ordering_system/pages/profile.dart';
 import 'pages/landingPage.dart';
-import 'pages/OrderNow.dart';
+import 'pages/ordernow.dart';
 import 'pages/contactus.dart';
 import 'pages/notifications.dart';
 

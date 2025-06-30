@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class OrderNow extends StatefulWidget {
-  const OrderNow({super.key});
+class Ordernow extends StatefulWidget {
+  const Ordernow ({super.key});
 
   @override
-  State<OrderNow> createState() => _OrderNowState();
+  State<Ordernow> createState() => _OrdernowState();
 }
 
-class _OrderNowState extends State<OrderNow> {
-  String selectedCategory = 'Bilao';
+class _OrdernowState extends State<Ordernow> {
+  String selectedCategory = 'Dishes';
   final Map<String, int> quantities = {
     'Lomi': 0,
     'Sweet & Spicy': 0,
@@ -19,12 +20,12 @@ class _OrderNowState extends State<OrderNow> {
   };
 
   final List<Map<String, String>> dishes = [
-    {'name': 'Lomi', 'price': '₱75.00', 'image': 'lib/assets/images/logo.jpg'},
-    {'name': 'Sweet & Spicy', 'price': '₱75.00', 'image': 'lib/assets/images/sweet_spicy.png'},
-    {'name': 'Plain', 'price': '₱75.00', 'image': 'lib/assets/images/plain.png'},
-    {'name': 'Bihon', 'price': '₱75.00', 'image': 'lib/assets/images/bihon.png'},
-    {'name': 'Tapsilog', 'price': '₱75.00', 'image': 'lib/assets/images/tapsilog.png'},
-    {'name': 'Hotsilog', 'price': '₱75.00', 'image': 'lib/assets/images/hotsilog.png'},
+    {'name': 'Lomi', 'price': '₱75.00', 'image': 'assets/images/lomi.jpg'},
+    {'name': 'Sweet & Spicy', 'price': '₱75.00', 'image': 'assets/images/sweet_and_spicy.png'},
+    {'name': 'Plain', 'price': '₱75.00', 'image': 'assets/images/plain.png'},
+    {'name': 'Bihon', 'price': '₱75.00', 'image': 'assets/images/Pancit_Canton_Bihon_Guisado.png'},
+    {'name': 'Tapsilog', 'price': '₱75.00', 'image': 'assets/images/tapsilog.png'},
+    {'name': 'Hotsilog', 'price': '₱75.00', 'image': 'assets/images/hotsilog.png'},
   ];
 
   @override
@@ -32,6 +33,49 @@ class _OrderNowState extends State<OrderNow> {
     final bool isMobile = MediaQuery.of(context).size.width < 768;
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFEFCA6C),
+        elevation: 2,
+        automaticallyImplyLeading: false,
+        title: Row(
+          children: [
+            Image.asset('assets/images/logo.jpg', height: 50),
+          ],
+        ),
+        actions: isMobile
+            ? [
+          Builder(
+            builder: (context) => IconButton(
+              icon: const Icon(Icons.menu, color: Colors.black),
+              onPressed: () => Scaffold.of(context).openEndDrawer(),
+            ),
+          ),
+        ]
+            : null,
+      ),
+      endDrawer: Drawer(
+        backgroundColor: const Color(0xFFEFCA6C),
+        width: 200,
+        child: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          children: [
+            const SizedBox(height: 85),
+            _drawerItem(context, 'Home', '/landingpage', FontAwesomeIcons.house),
+            _drawerItem(context, 'Order Now', '/OrderNow', FontAwesomeIcons.cartPlus),
+            _drawerItem(context, 'Contact Us', '/contactus', FontAwesomeIcons.phone),
+            _drawerItem(context, 'Notifications', '/notifications', FontAwesomeIcons.bell),
+            _drawerItem(context, 'Account', '/profile', FontAwesomeIcons.user),
+            ListTile(
+              leading: const Icon(FontAwesomeIcons.arrowRightFromBracket, color: Colors.black,),
+              title: const Text('Logout', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),),
+              onTap: () {
+                Navigator.pop(context);
+                _showLogoutModal(context);
+              },
+            ),
+          ],
+        ),
+      ),
       body: Column(
         children: [
           const SizedBox(height: 20),
@@ -40,7 +84,7 @@ class _OrderNowState extends State<OrderNow> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
-              children: ['', 'Bilao', ''].map((category) {
+              children: ['Dishes', '', ''].map((category) {
                 final isSelected = selectedCategory == category;
                 return Expanded(
                   child: GestureDetector(
@@ -70,7 +114,7 @@ class _OrderNowState extends State<OrderNow> {
           ),
           const SizedBox(height: 16),
 
-          // Dishes Grid - Now with no images or text
+          // Dishes Grid
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -80,6 +124,7 @@ class _OrderNowState extends State<OrderNow> {
                 crossAxisSpacing: 12,
                 childAspectRatio: 0.75,
                 children: dishes.map((dish) {
+                  final name = dish['name']!;
                   return Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -95,7 +140,36 @@ class _OrderNowState extends State<OrderNow> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        // No image or text
+                        const SizedBox(height: 10),
+                        Image.asset(dish['image']!, height: 105, fit: BoxFit.cover),
+                        const SizedBox(height: 10),
+                        Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
+                        Text(dish['price']!, style: const TextStyle(color: Colors.black54)),
+                        const SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.remove_circle_outline),
+                              onPressed: () {
+                                setState(() {
+                                  if (quantities[name]! > 1) {
+                                    quantities[name] = quantities[name]! - 1;
+                                  }
+                                });
+                              },
+                            ),
+                            Text('${quantities[name]}'),
+                            IconButton(
+                              icon: const Icon(Icons.add_circle_outline),
+                              onPressed: () {
+                                setState(() {
+                                  quantities[name] = quantities[name]! + 1;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   );
@@ -108,20 +182,10 @@ class _OrderNowState extends State<OrderNow> {
     );
   }
 
-  Widget _drawerItem(BuildContext context, String title, String route) {
+  Widget _drawerItem(BuildContext context, String title, String route, IconData icon) {
     return ListTile(
-      title: Text(title, style: const TextStyle(fontSize: 16)),
-      onTap: () {
-        Navigator.pop(context);
-        Navigator.pushNamed(context, route);
-      },
-    );
-  }
-
-  Widget _iconItem(BuildContext context, String title, IconData icon, String route) {
-    return ListTile(
-      leading: Icon(icon),
-      title: Text(title, style: const TextStyle(fontSize: 16)),
+      leading: FaIcon(icon, color: Colors.black, size: 23,),
+      title: Text(title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
       onTap: () {
         Navigator.pop(context);
         Navigator.pushNamed(context, route);
