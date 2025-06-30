@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'pages/landingPage.dart';
+import 'pages/OrderNow.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,9 +14,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'LomiHub',
       debugShowCheckedModeBanner: false,
-      initialRoute: '/landingPage',
+      initialRoute: '/OrderNow',
       routes: {
         '/landingPage': (context) => const  LandingPage(),
+        '/OrderNow': (context)   => const  OrderNow(),
       },
     );
   }
