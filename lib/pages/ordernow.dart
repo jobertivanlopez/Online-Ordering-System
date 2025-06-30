@@ -1,65 +1,116 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class Ordernow extends StatelessWidget {
-  const Ordernow({super.key});
+class OrderNow extends StatefulWidget {
+  const OrderNow({super.key});
+
+  @override
+  State<OrderNow> createState() => _OrderNowState();
+}
+
+class _OrderNowState extends State<OrderNow> {
+  String selectedCategory = 'Bilao';
+  final Map<String, int> quantities = {
+    'Lomi': 0,
+    'Sweet & Spicy': 0,
+    'Plain': 0,
+    'Bihon': 0,
+    'Tapsilog': 0,
+    'Hotsilog': 0,
+  };
+
+  final List<Map<String, String>> dishes = [
+    {'name': 'Lomi', 'price': '₱75.00', 'image': 'lib/assets/images/logo.jpg'},
+    {'name': 'Sweet & Spicy', 'price': '₱75.00', 'image': 'lib/assets/images/sweet_spicy.png'},
+    {'name': 'Plain', 'price': '₱75.00', 'image': 'lib/assets/images/plain.png'},
+    {'name': 'Bihon', 'price': '₱75.00', 'image': 'lib/assets/images/bihon.png'},
+    {'name': 'Tapsilog', 'price': '₱75.00', 'image': 'lib/assets/images/tapsilog.png'},
+    {'name': 'Hotsilog', 'price': '₱75.00', 'image': 'lib/assets/images/hotsilog.png'},
+  ];
 
   @override
   Widget build(BuildContext context) {
     final bool isMobile = MediaQuery.of(context).size.width < 768;
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFFEFCA6C),
-        elevation: 2,
-        automaticallyImplyLeading: false,
-        title: Row(
-          children: [
-            Image.asset('assets/images/logo.jpg', height: 50),
-          ],
-        ),
-        actions: isMobile
-            ? [
-          Builder(
-            builder: (context) => IconButton(
-              icon: const Icon(FontAwesomeIcons.bars, color: Colors.black),
-              onPressed: () => Scaffold.of(context).openEndDrawer(),
+      body: Column(
+        children: [
+          const SizedBox(height: 20),
+
+          // Category Tabs
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              children: ['', 'Bilao', ''].map((category) {
+                final isSelected = selectedCategory == category;
+                return Expanded(
+                  child: GestureDetector(
+                    onTap: () => setState(() => selectedCategory = category),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      margin: const EdgeInsets.symmetric(horizontal: 5),
+                      decoration: BoxDecoration(
+                        color: isSelected ? const Color(0xFFEFCA6C) : Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.black26),
+                      ),
+                      child: Center(
+                        child: Text(
+                          category,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: isSelected ? Colors.black : Colors.grey[600],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
             ),
           ),
-        ]
-            : null,
-      ),
+          const SizedBox(height: 16),
 
-      endDrawer: Drawer(
-        backgroundColor: const Color(0xFFEFCA6C),
-        width: 200,
-        child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          children: [
-            const SizedBox(height: 85),
-            _drawerItem(context, 'Home', '/landingpage', FontAwesomeIcons.house),
-            _drawerItem(context, 'Order Now', '/OrderNow', FontAwesomeIcons.cartPlus),
-            _drawerItem(context, 'Contact Us', '/contactus', FontAwesomeIcons.phone),
-            _drawerItem(context, 'Notifications', '/notifications', FontAwesomeIcons.bell),
-            _drawerItem(context, 'Account', '/profile', FontAwesomeIcons.user),
-            ListTile(
-              leading: const Icon(FontAwesomeIcons.arrowRightFromBracket, color: Colors.black,),
-              title: const Text('Logout', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),),
-              onTap: () {
-                Navigator.pop(context);
-                _showLogoutModal(context);
-              },
+          // Dishes Grid - Now with no images or text
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: GridView.count(
+                crossAxisCount: isMobile ? 2 : 3,
+                mainAxisSpacing: 12,
+                crossAxisSpacing: 12,
+                childAspectRatio: 0.75,
+                children: dishes.map((dish) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 4,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // No image or text
+                      ],
+                    ),
+                  );
+                }).toList(),
+              ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _drawerItem(BuildContext context, String title, String route, IconData icon) {
+  Widget _drawerItem(BuildContext context, String title, String route) {
     return ListTile(
-      leading: FaIcon(icon, color: Colors.black, size: 23,),
-      title: Text(title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+      title: Text(title, style: const TextStyle(fontSize: 16)),
       onTap: () {
         Navigator.pop(context);
         Navigator.pushNamed(context, route);
@@ -67,6 +118,16 @@ class Ordernow extends StatelessWidget {
     );
   }
 
+  Widget _iconItem(BuildContext context, String title, IconData icon, String route) {
+    return ListTile(
+      leading: Icon(icon),
+      title: Text(title, style: const TextStyle(fontSize: 16)),
+      onTap: () {
+        Navigator.pop(context);
+        Navigator.pushNamed(context, route);
+      },
+    );
+  }
 
   void _showLogoutModal(BuildContext context) {
     showModalBottomSheet(
