@@ -57,10 +57,10 @@ flutter:
   - assets/images/lomi.jpg
   - assets/images/chami.jpg
   - assets/images/logo.jpg
-  - assets/Dessert.png
-  - assets/Pancit_Canton_Bihon_Guisado.png
-  - assets/Spaghetti.png
-  - assets/sweet_and_spicy.png
+  - assets/images/Dessert.png
+  - assets/images/Pancit_Canton_Bihon_Guisado.png
+  - assets/images/Spaghetti.png
+  - assets/images/sweet_and_spicy.png
 
 
   #uses-material-design: true
