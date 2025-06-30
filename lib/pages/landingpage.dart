@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Landingpage extends StatelessWidget {
-  const Landingpage({super.key});
+  const Landingpage ({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -51,17 +52,15 @@ class Landingpage extends StatelessWidget {
           ],
         ),
       ),
-      body: SafeArea(
+      body:SafeArea(
         child: Column(
           children: [
-            // Your previous code here for Landingpage body
             Expanded(
               child: SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
-                      SizedBox(height: 100),
                       Text(
                         'You Might Also Like',
                         style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
@@ -73,19 +72,19 @@ class Landingpage extends StatelessWidget {
                         child: Row(
                           children: [
                             FoodItem(
-                              image: 'assets/Dessert.png',
+                              image: 'assets/images/Dessert.png',
                               title: 'Grahams',
                             ),
                             FoodItem(
-                              image: 'assets/Pancit_Canton_Bihon_Guisado.png',
+                              image: 'assets/images/Pancit_Canton_Bihon_Guisado.png',
                               title: 'Bihon',
                             ),
                             FoodItem(
-                              image: 'assets/sweet_and_spicy.png',
+                              image: 'assets/images/sweet_and_spicy.png',
                               title: 'Sweet & Spicy',
                             ),
                             FoodItem(
-                              image: 'assets/Spaghetti.png',
+                              image: 'assets/images/Spaghetti.png',
                               title: 'Spaghetti',
                             ),
                           ],
@@ -96,6 +95,7 @@ class Landingpage extends StatelessWidget {
                 ),
               ),
             ),
+
             // Footer Section
             Container(
               padding: EdgeInsets.only(left: 25, top: 18, right: 25, bottom: 14),
@@ -114,76 +114,130 @@ class Landingpage extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 5),
-                  Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          constraints: BoxConstraints(maxWidth: 150),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Purok 2,',
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        constraints: BoxConstraints(maxWidth: 150),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Purok 2,',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 13,
+                              ),
+                            ),
+                            SizedBox(height: 3,),
+                            Text('Puting Bato East',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w400,
                                   fontSize: 13,
+                                )
+                            ),
+                            SizedBox(height: 3,),
+                            Text('Calaca City Batangas',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 13,
+                                )
+                            ),
+                          ],
+                        ),
+
+                      ),
+
+
+                      Row(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                'PHONE NO.',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 12,
                                 ),
                               ),
-                              SizedBox(height: 3),
-                              Text('Puting Bato East',
-                                  style: TextStyle(
+                              SizedBox(height: 1),
+                              Text(
+                                '09123456789',
+                                style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w400,
-                                    fontSize: 13,
-                                  )),
-                              SizedBox(height: 3),
-                              Text('Calaca City Batangas',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 13,
-                                  )),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          child: Row(
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'PHONE NO.',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  SizedBox(height: 10),
-                                  Text(
-                                    '09123456789',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ],
+                                    fontSize: 13
+                                ),
                               ),
                             ],
                           ),
-                        ),
-                      ],
-                    ),
+
+                        ],
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 30),
+
+                  SizedBox(height: 20),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Column(
+                        children: [
+                          SizedBox(height: 9,),
+                          Text('FOLLOW US', style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                          )),
+                          SizedBox(height: 7,),
+                          Row(
+                            children: [
+                              IconButton(
+                                icon: Icon(
+                                  Icons.facebook,
+                                  size: 30,
+                                  color: Colors.white,
+                                ),
+                                onPressed: () {},
+                              ),
+                              SizedBox(width: 7,),
+                              IconButton(
+                                icon: Icon(
+                                  FontAwesomeIcons.instagram,
+                                  size: 30,
+                                  color: Colors.white,
+                                ),
+                                onPressed: () {},
+                              ),
+                              SizedBox(width: 7,),
+                              IconButton(
+                                icon: Icon(
+                                  FontAwesomeIcons.twitter,
+                                  size: 30,
+                                  color: Colors.white,
+                                ),
+                                onPressed: () {},
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 16),
                 ],
               ),
-            ),
+            )
           ],
         ),
       ),
+
     );
   }
 
@@ -236,7 +290,7 @@ class FoodItem extends StatelessWidget {
   final String image;
   final String title;
 
-  FoodItem({required this.image, required this.title});
+  const FoodItem({super.key, required this.image, required this.title});
 
   @override
   Widget build(BuildContext context) {

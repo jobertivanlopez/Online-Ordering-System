@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'pages/landingPage.dart';
+import 'pages/Landingpage.dart';
 import 'pages/OrderNow.dart';
 import 'pages/contactus.dart';
 import 'pages/notifications.dart';
