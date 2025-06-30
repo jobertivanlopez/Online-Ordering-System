@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Profile extends StatelessWidget {
   const Profile({super.key});
@@ -36,14 +37,14 @@ class Profile extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 12),
           children: [
             const SizedBox(height: 85),
-            _drawerItem(context, 'Home', '/landingpage'),
-            _drawerItem(context, 'Order Now', '/ordernow'),
-            _drawerItem(context, 'Contact Us', '/contactus'),
-            _iconItem(context, 'Notifications', Icons.notifications, '/notifications'),
-            _iconItem(context, 'Account', Icons.account_circle, '/profile'),
+            _drawerItem(context, 'Home', '/landingpage', FontAwesomeIcons.home),
+            _drawerItem(context, 'Order Now', '/OrderNow', FontAwesomeIcons.cartPlus),
+            _drawerItem(context, 'Contact Us', '/contactus', FontAwesomeIcons.phone),
+            _drawerItem(context, 'Notifications', '/notifications', FontAwesomeIcons.bell),
+            _drawerItem(context, 'Account', '/profile', FontAwesomeIcons.user),
             ListTile(
-              leading: const Icon(Icons.logout),
-              title: const Text('Logout'),
+              leading: const Icon(FontAwesomeIcons.signOut, color: Colors.black,),
+              title: const Text('Logout', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),),
               onTap: () {
                 Navigator.pop(context);
                 _showLogoutModal(context);
@@ -55,9 +56,10 @@ class Profile extends StatelessWidget {
     );
   }
 
-  Widget _drawerItem(BuildContext context, String title, String route) {
+  Widget _drawerItem(BuildContext context, String title, String route, IconData icon) {
     return ListTile(
-      title: Text(title, style: const TextStyle(fontSize: 16)),
+      leading: FaIcon(icon, color: Colors.black, size: 23,),
+      title: Text(title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
       onTap: () {
         Navigator.pop(context);
         Navigator.pushNamed(context, route);
