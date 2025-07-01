@@ -20,9 +20,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: '/landingpage',
       routes: {
-        '/landingpage': (context) => const Landingpage(),
+        '/landingpage': (context) => const LandingPage(),
         '/contactus': (context) => const ContactUs(),
-        '/OrderNow': (context)   => const Ordernow(),
+        '/ordernow': (context)   => const Ordernow(),
         '/notifications': (context) => const Notifications(),
         '/profile': (context) => const Profile(),
       },
