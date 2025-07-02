@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 
+void main() {
+  runApp(const MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: LandingPage(),
+  ));
+}
+
 class LandingPage extends StatelessWidget {
   const LandingPage({super.key});
 
@@ -52,7 +59,15 @@ class LandingPage extends StatelessWidget {
           ],
         ),
       ),
-      body: const OurServices(),
+      body: const SingleChildScrollView(
+        child: Column(
+          children: [
+            OurServices(),
+            SizedBox(height: 30),
+            BestSellingSection(),
+          ],
+        ),
+      ),
     );
   }
 
@@ -129,7 +144,7 @@ class OurServices extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: SingleChildScrollView(
+      child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -241,3 +256,128 @@ class ServiceCard extends StatelessWidget {
     );
   }
 }
+
+class BestSellingSection extends StatelessWidget {
+  const BestSellingSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        children: [
+          const Text(
+            'Our Best Selling',
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 20),
+          Wrap(
+            spacing: 20,
+            runSpacing: 20,
+            children: const [
+              BestSellingCard(
+                title: 'Best Selling Dishes',
+                itemName: 'Lomi',
+                imageUrl: 'https://i.imgur.com/5bTz49m.png',
+                bgColor: Color(0xFFCFF4F0),
+              ),
+              BestSellingCard(
+                title: 'Best Selling Bilao',
+                itemName: 'Palabok',
+                imageUrl: 'https://i.imgur.com/tb5nG1G.png',
+                bgColor: Color(0xFFF8D1DC),
+              ),
+              BestSellingCard(
+                title: 'Best Selling Desserts',
+                itemName: 'Leche Flan',
+                imageUrl: 'https://i.imgur.com/WafDxCS.png',
+                bgColor: Color(0xFFCFF3FC),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class BestSellingCard extends StatelessWidget {
+  final String title;
+  final String itemName;
+  final String imageUrl;
+  final Color bgColor;
+
+  const BestSellingCard({
+    super.key,
+    required this.title,
+    required this.itemName,
+    required this.imageUrl,
+    required this.bgColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 300,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontStyle: FontStyle.italic,
+                  color: Colors.deepOrange,
+                ),
+              ),
+              Text(
+                itemName,
+                style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Text(
+                    'Order Now',
+                    style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      fontSize: 14,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  const Icon(Icons.arrow_right_alt, size: 20),
+                ],
+              ),
+            ],
+          ),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(50),
+            child: Image.network(
+              imageUrl,
+              width: 70,
+              height: 70,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
+
