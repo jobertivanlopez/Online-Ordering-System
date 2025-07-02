@@ -87,7 +87,9 @@ class Landingpage extends StatelessWidget {
                     ),
                     const SizedBox(height: 32),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/OrderNow');
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFFFFD766),
                         foregroundColor: Colors.black,
@@ -126,6 +128,8 @@ class Landingpage extends StatelessWidget {
                 ),
               ),
 
+              SizedBox(height: 20,),
+
               // "You Might Also Like" Section
               Container(
                 padding: const EdgeInsets.all(16.0),
@@ -151,6 +155,8 @@ class Landingpage extends StatelessWidget {
                   ],
                 ),
               ),
+
+              SizedBox(height: 30,),
 
               // Footer Section
               Container(
@@ -316,7 +322,7 @@ class FoodItem extends StatelessWidget {
       margin: EdgeInsets.only(right: 16),
       child: Column(
         children: [
-          Image.asset(image, width: 130, height: 130, fit: BoxFit.cover),
+          Image.asset(image, width: 110, height: 110, fit: BoxFit.cover),
           SizedBox(height: 10),
           Text(
             title,
