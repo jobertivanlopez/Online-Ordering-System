@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Ordernow extends StatefulWidget {
-  const Ordernow ({super.key});
+  const Ordernow({super.key});
 
   @override
   State<Ordernow> createState() => _OrdernowState();
@@ -10,6 +10,7 @@ class Ordernow extends StatefulWidget {
 
 class _OrdernowState extends State<Ordernow> {
   String selectedCategory = 'Dishes';
+  String deliveryOption = 'Delivery'; // Default delivery option
   final Map<String, int> quantities = {
     'Lomi': 0,
     'Sweet & Spicy': 0,
@@ -46,7 +47,7 @@ class _OrdernowState extends State<Ordernow> {
             ? [
           Builder(
             builder: (context) => IconButton(
-              icon: const Icon(Icons.menu, color: Colors.black),
+              icon: const Icon(FontAwesomeIcons.bars, color: Colors.black),
               onPressed: () => Scaffold.of(context).openEndDrawer(),
             ),
           ),
@@ -55,7 +56,7 @@ class _OrdernowState extends State<Ordernow> {
       ),
       endDrawer: Drawer(
         backgroundColor: const Color(0xFFEFCA6C),
-        width: 200,
+        width: 300,
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           children: [
@@ -66,8 +67,8 @@ class _OrdernowState extends State<Ordernow> {
             _drawerItem(context, 'Notifications', '/notifications', FontAwesomeIcons.bell),
             _drawerItem(context, 'Account', '/profile', FontAwesomeIcons.user),
             ListTile(
-              leading: const Icon(FontAwesomeIcons.arrowRightFromBracket, color: Colors.black,),
-              title: const Text('Logout', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),),
+              leading: const Icon(FontAwesomeIcons.arrowRightFromBracket, color: Colors.black),
+              title: const Text('Logout', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
               onTap: () {
                 Navigator.pop(context);
                 _showLogoutModal(context);
@@ -76,53 +77,53 @@ class _OrdernowState extends State<Ordernow> {
           ],
         ),
       ),
-      body: Column(
-        children: [
-          const SizedBox(height: 20),
-
-          // Category Tabs
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              children: ['Dishes', '', ''].map((category) {
-                final isSelected = selectedCategory == category;
-                return Expanded(
-                  child: GestureDetector(
-                    onTap: () => setState(() => selectedCategory = category),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      margin: const EdgeInsets.symmetric(horizontal: 5),
-                      decoration: BoxDecoration(
-                        color: isSelected ? const Color(0xFFEFCA6C) : Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.black26),
-                      ),
-                      child: Center(
-                        child: Text(
-                          category,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: isSelected ? Colors.black : Colors.grey[600],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const SizedBox(height: 20),
+            // Category Tabs
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                children: ['Dishes', 'Bilao', 'Desserts'].map((category) {
+                  final isSelected = selectedCategory == category;
+                  return Expanded(
+                    child: GestureDetector(
+                      onTap: () => setState(() => selectedCategory = category),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        margin: const EdgeInsets.symmetric(horizontal: 5),
+                        decoration: BoxDecoration(
+                          color: isSelected ? const Color(0xFFEFCA6C) : Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.black26),
+                        ),
+                        child: Center(
+                          child: Text(
+                            category,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: isSelected ? Colors.black : Colors.grey[600],
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                );
-              }).toList(),
+                  );
+                }).toList(),
+              ),
             ),
-          ),
-          const SizedBox(height: 16),
-
-          // Dishes Grid
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+            const SizedBox(height: 16),
+            // Dishes Grid
+            Padding(
+              padding: const EdgeInsets.only(left: 16, top: 10, right: 16, bottom: 16),
               child: GridView.count(
                 crossAxisCount: isMobile ? 2 : 3,
                 mainAxisSpacing: 12,
                 crossAxisSpacing: 12,
-                childAspectRatio: 0.75,
+                childAspectRatio: 0.69,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
                 children: dishes.map((dish) {
                   final name = dish['name']!;
                   return Container(
@@ -140,20 +141,20 @@ class _OrdernowState extends State<Ordernow> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const SizedBox(height: 10),
-                        Image.asset(dish['image']!, height: 105, fit: BoxFit.cover),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 1),
+                        Image.asset(dish['image']!, height: 90, fit: BoxFit.cover),
+                        const SizedBox(height: 8),
                         Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
                         Text(dish['price']!, style: const TextStyle(color: Colors.black54)),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 1),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             IconButton(
-                              icon: const Icon(Icons.remove_circle_outline),
+                              icon: const FaIcon(FontAwesomeIcons.circleMinus, color: Colors.black),
                               onPressed: () {
                                 setState(() {
-                                  if (quantities[name]! > 1) {
+                                  if (quantities[name]! > 0) {
                                     quantities[name] = quantities[name]! - 1;
                                   }
                                 });
@@ -161,7 +162,7 @@ class _OrdernowState extends State<Ordernow> {
                             ),
                             Text('${quantities[name]}'),
                             IconButton(
-                              icon: const Icon(Icons.add_circle_outline),
+                              icon: const FaIcon(FontAwesomeIcons.circlePlus, color: Colors.black),
                               onPressed: () {
                                 setState(() {
                                   quantities[name] = quantities[name]! + 1;
@@ -176,15 +177,130 @@ class _OrdernowState extends State<Ordernow> {
                 }).toList(),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
+      ),
+      floatingActionButton: Opacity(
+        opacity: 0.75,
+        child: FloatingActionButton(
+          onPressed: () => _showSummarySidebar(context),
+          backgroundColor: const Color(0xFFEFCA6C),
+          foregroundColor: Colors.black,
+          child: const Icon(FontAwesomeIcons.receipt),
+        ),
+      ),
+      floatingActionButtonLocation: const OffsetFloatingActionButtonLocation(
+        xOffset: 30,
+        yOffset: -200,
       ),
     );
   }
 
+  void _checkout() {
+    print('Proceeding to checkout...');
+  }
+
+  void _showSummarySidebar(BuildContext context) {
+    final orderedItems = quantities.entries.where((e) => e.value > 0).toList();
+
+    showDialog(
+      context: context,
+      builder: (context) => Align(
+        alignment: Alignment.centerRight,
+        child: FractionallySizedBox(
+          widthFactor: 0.7, // Sidebar width (70% of screen)
+          child: Material(
+            color: Colors.white,
+            elevation: 13,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.horizontal(left: Radius.circular(10)),
+            ),
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Your Orders',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 12),
+                    if (orderedItems.isEmpty)
+                      const Text('No items selected.'),
+                    if (orderedItems.isNotEmpty)
+                      Expanded(
+                        child: ListView(
+                          children: orderedItems
+                              .map((item) => ListTile(
+                            title: Text(item.key, style: const TextStyle(fontWeight: FontWeight.bold)),
+                            trailing: Text('x${item.value}', style: const TextStyle(fontSize: 15)),
+                          ))
+                              .toList(),
+                        ),
+                      ),
+                    // Total price section
+                    if (orderedItems.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 12),
+                        child: Text(
+                          'Total: ₱${orderedItems.fold(0.0, (total, item) {
+                            final price = double.tryParse(dishes.firstWhere((dish) => dish['name'] == item.key)['price']!.substring(1)) ?? 0;
+                            return total + (price * item.value);
+                          }).toStringAsFixed(2)}',
+                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    const SizedBox(height: 12),
+                    Text('Select Delivery Option:'),
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          if (deliveryOption == 'Delivery') {
+                            deliveryOption = 'Pick Up';
+                          } else if (deliveryOption == 'Pick Up') {
+                            deliveryOption = 'Reservation';
+                          } else {
+                            deliveryOption = 'Delivery';
+                          }
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFEFCA6C),
+                        foregroundColor: Colors.black,
+                        minimumSize: const Size.fromHeight(50),
+                      ),
+                      child: Text(deliveryOption), // Button text changes based on selected option
+                    ),
+                    const SizedBox(height: 12),
+                    ElevatedButton(
+                      onPressed: () {
+                        _checkout();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFEFCA6C),
+                        foregroundColor: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        minimumSize: const Size.fromHeight(50),
+                      ),
+                      child: const Text('Checkout'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Your _drawerItem method here
   Widget _drawerItem(BuildContext context, String title, String route, IconData icon) {
     return ListTile(
-      leading: FaIcon(icon, color: Colors.black, size: 23,),
+      leading: FaIcon(icon, color: Colors.black, size: 23),
       title: Text(title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
       onTap: () {
         Navigator.pop(context);
@@ -236,5 +352,26 @@ class _OrdernowState extends State<Ordernow> {
         ),
       ),
     );
+  }
+}
+
+class OffsetFloatingActionButtonLocation extends FloatingActionButtonLocation {
+  final double xOffset;
+  final double yOffset;
+
+  const OffsetFloatingActionButtonLocation({
+    this.xOffset = 0,
+    this.yOffset = 0,
+  });
+
+  @override
+  Offset getOffset(ScaffoldPrelayoutGeometry geometry) {
+    final fabSize = geometry.floatingActionButtonSize;
+    final scaffoldSize = geometry.scaffoldSize;
+
+    double x = scaffoldSize.width - fabSize.width - 16 + xOffset;
+    double y = scaffoldSize.height - fabSize.height - 16 + yOffset;
+
+    return Offset(x, y);
   }
 }
