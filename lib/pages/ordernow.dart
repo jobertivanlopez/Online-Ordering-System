@@ -461,7 +461,7 @@ class _OrdernowState extends State<Ordernow> {
                                   // Check if the item is in dishes
                                   final dish = dishes.firstWhere(
                                         (dish) => dish['name'] == item.key,
-                                    orElse: () => {},  // Return an empty map instead of null
+                                    orElse: () => {},
                                   );
                                   if (dish.isNotEmpty) {
                                     price = double.tryParse(dish['price']?.substring(1) ?? '0') ?? 0.0;
@@ -469,21 +469,21 @@ class _OrdernowState extends State<Ordernow> {
                                     // Check if the item is in bilao
                                     final bilaoItem = bilao.firstWhere(
                                           (bilao) => bilao['name'] == item.key,
-                                      orElse: () => {},  // Return an empty map instead of null
+                                      orElse: () => {},
                                     );
                                     if (bilaoItem.isNotEmpty) {
                                       price = double.tryParse(bilaoItem['price']?.substring(1) ?? '0') ?? 0.0;
                                     }
                                   }
 
-                                  return total + (price * item.value); // Add price * quantity
+                                  return total + (price * item.value);
                                 }).toStringAsFixed(2)}',
                                 style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                               ),
                             ),
                           const SizedBox(height: 12),
                           Text('Select Delivery Option:'),
-                          // Button to toggle between Delivery, Pick Up, and Reservation
+
                           ElevatedButton(
                             onPressed: () {
                               setState(() {
@@ -502,7 +502,7 @@ class _OrdernowState extends State<Ordernow> {
                               foregroundColor: Colors.black,
                               minimumSize: const Size.fromHeight(50),
                             ),
-                            child: Text(deliveryOption), // This will change the button text
+                            child: Text(deliveryOption),
                           ),
                           const SizedBox(height: 12),
                           ElevatedButton(
