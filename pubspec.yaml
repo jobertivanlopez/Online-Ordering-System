@@ -67,6 +67,7 @@ flutter:
   - assets/images/hotsilog.png
   - assets/images/Graham Bar.jpg
   - assets/images/leche plan.jpg
+  - assets/images/Graham.jpg
 
 
   #uses-material-design: true

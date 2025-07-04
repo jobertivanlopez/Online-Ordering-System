@@ -132,9 +132,9 @@ class Landingpage extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        _serviceCard(Icons.delivery_dining, 'Fast Delivery'),
-                        _serviceCard(Icons.restaurant_menu, 'Fresh Menu'),
-                        _serviceCard(Icons.star, 'Top Rated'),
+                        _serviceCard(Icons.person_2_rounded, 'Delivery'),
+                        _serviceCard(Icons.handshake, 'Pickup'),
+                        _serviceCard(Icons.shopping_bag, 'Reservation'),
                       ],
                     ),
                   ],

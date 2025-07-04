@@ -20,7 +20,7 @@ class _OrdernowState extends State<Ordernow> {
   };
 
   final List<Map<String, String>> dishes = [
-    {'name': 'Graham', 'price': '₱75.00', 'image': 'assets/images/Dessert.jpg'},
+    {'name': 'Graham', 'price': '₱75.00', 'image': 'assets/images/Graham.jpg'},
     {'name': 'Leche Plan', 'price': '₱75.00', 'image': 'assets/images/leche plan.jpg'},
     {'name': 'Graham Bar', 'price': '₱75.00', 'image': 'assets/images/Graham Bar.jpg'},
     {'name': 'Maja Blanca', 'price': '₱75.00', 'image': 'assets/images/maja.jpg'},
