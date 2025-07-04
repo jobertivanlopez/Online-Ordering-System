@@ -65,6 +65,8 @@ flutter:
   - assets/images/plain.png
   - assets/images/tapsilog.png
   - assets/images/hotsilog.png
+  - assets/images/chami_bilao.png
+  - assets/images/palabok_bilao.png
 
 
   #uses-material-design: true

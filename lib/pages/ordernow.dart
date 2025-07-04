@@ -10,7 +10,7 @@ class Ordernow extends StatefulWidget {
 
 class _OrdernowState extends State<Ordernow> {
   String selectedCategory = 'Dishes';
-  String deliveryOption = 'Delivery'; // Default delivery option
+  String deliveryOption = 'Delivery';
   final Map<String, int> quantities = {
     'Lomi': 0,
     'Sweet & Spicy': 0,
@@ -18,6 +18,10 @@ class _OrdernowState extends State<Ordernow> {
     'Bihon': 0,
     'Tapsilog': 0,
     'Hotsilog': 0,
+    'Pancit Bilao': 0,
+    'Spaghetti Bilao': 0,
+    'Palabok Bilao': 0,
+    'Chami Bilao': 0,
   };
 
   final List<Map<String, String>> dishes = [
@@ -29,11 +33,41 @@ class _OrdernowState extends State<Ordernow> {
     {'name': 'Hotsilog', 'price': '₱75.00', 'image': 'assets/images/hotsilog.png'},
   ];
 
+
+  final List<Map<String, String>> bilao = [
+    {
+      'name': 'Pancit Bilao',
+      'price': '₱250.00',
+      'image': 'assets/images/Pancit_Canton_Bihon_Guisado.png',
+    },
+    {
+      'name': 'Spaghetti Bilao',
+      'price': '₱280.00',
+      'image': 'assets/images/Spaghetti.png',
+
+    },
+    {
+      'name': 'Palabok Bilao',
+      'price': '₱300.00',
+      'image': 'assets/images/palabok_bilao.png',
+
+    },
+    {
+      'name': 'Chami Bilao',
+      'price': '₱270.00',
+      'image': 'assets/images/chami_bilao.png',
+    },
+  ];
+
+
+  TextEditingController addressController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final bool isMobile = MediaQuery.of(context).size.width < 768;
 
     return Scaffold(
+      // backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: const Color(0xFFEFCA6C),
         elevation: 2,
@@ -56,7 +90,7 @@ class _OrdernowState extends State<Ordernow> {
       ),
       endDrawer: Drawer(
         backgroundColor: const Color(0xFFEFCA6C),
-        width: 300,
+        width: 200,
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           children: [
@@ -81,6 +115,7 @@ class _OrdernowState extends State<Ordernow> {
         child: Column(
           children: [
             const SizedBox(height: 20),
+
             // Category Tabs
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -113,70 +148,14 @@ class _OrdernowState extends State<Ordernow> {
                 }).toList(),
               ),
             ),
+
             const SizedBox(height: 16),
-            // Dishes Grid
-            Padding(
-              padding: const EdgeInsets.only(left: 16, top: 10, right: 16, bottom: 16),
-              child: GridView.count(
-                crossAxisCount: isMobile ? 2 : 3,
-                mainAxisSpacing: 12,
-                crossAxisSpacing: 12,
-                childAspectRatio: 0.69,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                children: dishes.map((dish) {
-                  final name = dish['name']!;
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.black12,
-                          blurRadius: 4,
-                          offset: Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const SizedBox(height: 1),
-                        Image.asset(dish['image']!, height: 90, fit: BoxFit.cover),
-                        const SizedBox(height: 8),
-                        Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                        Text(dish['price']!, style: const TextStyle(color: Colors.black54)),
-                        const SizedBox(height: 1),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            IconButton(
-                              icon: const FaIcon(FontAwesomeIcons.circleMinus, color: Colors.black),
-                              onPressed: () {
-                                setState(() {
-                                  if (quantities[name]! > 0) {
-                                    quantities[name] = quantities[name]! - 1;
-                                  }
-                                });
-                              },
-                            ),
-                            Text('${quantities[name]}'),
-                            IconButton(
-                              icon: const FaIcon(FontAwesomeIcons.circlePlus, color: Colors.black),
-                              onPressed: () {
-                                setState(() {
-                                  quantities[name] = quantities[name]! + 1;
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  );
-                }).toList(),
-              ),
-            ),
+
+            selectedCategory == 'Dishes'
+                ? _buildDishesGrid(isMobile)  // If "Dishes" is selected, show the Dishes Grid
+                : selectedCategory == 'Bilao'
+                ? _buildBilaoGrid(isMobile)  // If "Bilao" is selected, show the Bilao Grid
+                : Container(),  // For "Desserts", we leave it empty for now
           ],
         ),
       ),
@@ -196,8 +175,235 @@ class _OrdernowState extends State<Ordernow> {
     );
   }
 
+  Widget _buildDishesGrid(bool isMobile) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, top: 10, right: 16, bottom: 16),
+      child: GridView.count(
+        crossAxisCount: isMobile ? 2 : 3,
+        mainAxisSpacing: 12,
+        crossAxisSpacing: 12,
+        childAspectRatio: 0.69,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        children: dishes.map((dish) {
+          final name = dish['name']!;
+          return Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 4,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(height: 1),
+                Image.asset(dish['image']!, height: 90, fit: BoxFit.cover),
+                const SizedBox(height: 8),
+                Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
+                Text(dish['price']!, style: const TextStyle(color: Colors.black54)),
+                const SizedBox(height: 1),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      icon: const FaIcon(FontAwesomeIcons.circleMinus, color: Colors.black),
+                      onPressed: () {
+                        setState(() {
+                          if (quantities[name]! > 0) {
+                            quantities[name] = quantities[name]! - 1;
+                          }
+                        });
+                      },
+                    ),
+                    Text('${quantities[name]}'),
+                    IconButton(
+                      icon: const FaIcon(FontAwesomeIcons.circlePlus, color: Colors.black),
+                      onPressed: () {
+                        setState(() {
+                          quantities[name] = quantities[name]! + 1;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  Widget _buildBilaoGrid(bool isMobile) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, top: 10, right: 16, bottom: 16),
+      child: GridView.count(
+        crossAxisCount: isMobile ? 2 : 3,
+        mainAxisSpacing: 12,
+        crossAxisSpacing: 12,
+        childAspectRatio: 0.75,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        children: bilao.map((dish) {
+          final name = dish['name']!;
+          final price = dish['price']!;
+          final image = dish['image']!;
+          return Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 4,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(image, height: 80, fit: BoxFit.cover),
+                const SizedBox(height: 8),
+                Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
+                Text(price, style: const TextStyle(color: Colors.black54)),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      icon: const FaIcon(FontAwesomeIcons.circleMinus, color: Colors.black,),
+                      onPressed: () {
+                        setState(() {
+                          if (quantities[name]! > 0) {
+                            quantities[name] = quantities[name]! - 1;
+                          }
+                        });
+                      },
+                    ),
+                    Text('${quantities[name]}'),
+                    IconButton(
+                      icon: const FaIcon(FontAwesomeIcons.circlePlus, color: Colors.black,),
+                      onPressed: () {
+                        setState(() {
+                          quantities[name] = quantities[name]! + 1;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+
+
+  //Checkout modal
   void _checkout() {
-    print('Proceeding to checkout...');
+    if (_hashItems()) {
+      _showCheckoutModal();
+    } else {
+      // Close the sidebar if it's open
+      Navigator.pop(context);
+
+      _showCustomSnackBar('Please add items to your order.');
+    }
+  }
+
+  void _showCustomSnackBar(String message) {
+    final overlay = Overlay.of(context);
+    final overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        bottom: 100,
+        left: 16,
+        right: 16,
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 12, horizontal: 45),
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.8),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Text(
+              message,
+              style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    overlay.insert(overlayEntry);
+
+    Future.delayed(Duration(seconds: 5), () {
+      overlayEntry.remove();
+    });
+  }
+
+
+  bool _hashItems(){
+    return quantities.values.any((quantity) => quantity > 0);
+  }
+
+  void _showCheckoutModal() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          content: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 1, vertical: 23,),
+                margin: EdgeInsets.only(bottom: 24),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Color(0xFFEFCA6C)
+                ),
+              ),
+              if (deliveryOption == 'Delivery')
+                TextField(
+                  controller: addressController,
+                  decoration: InputDecoration(
+                    labelText: 'Enter Delivery Address',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFEFCA6C)),
+                child: const Text('Cancel', style: TextStyle(color: Colors.white),),
+              ),
+              ElevatedButton(
+                onPressed: _hashItems() ? () {
+                  Navigator.pop(context); // Close the modal
+                } : null,
+                style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFEFCA6C)),
+                child: const Text('Place Order', style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                )),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   void _showSummarySidebar(BuildContext context) {
@@ -205,99 +411,132 @@ class _OrdernowState extends State<Ordernow> {
 
     showDialog(
       context: context,
-      builder: (context) => Align(
-        alignment: Alignment.centerRight,
-        child: FractionallySizedBox(
-          widthFactor: 0.7, // Sidebar width (70% of screen)
-          child: Material(
-            color: Colors.white,
-            elevation: 13,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.horizontal(left: Radius.circular(10)),
-            ),
-            child: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Your Orders',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Align(
+              alignment: Alignment.centerRight,
+              child: FractionallySizedBox(
+                widthFactor: 0.7,
+                child: Material(
+                  color: Colors.white,
+                  elevation: 13,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.horizontal(left: Radius.circular(10)),
+                  ),
+                  child: SafeArea(
+                    child: Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Your Orders',
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 12),
+                          if (orderedItems.isEmpty)
+                            const Text('No items selected.'),
+                          if (orderedItems.isNotEmpty)
+                            Expanded(
+                              child: ListView(
+                                children: orderedItems
+                                    .map((item) => ListTile(
+                                  title: Text(item.key,
+                                      style: const TextStyle(fontWeight: FontWeight.bold)),
+                                  trailing: Text('x${item.value}',
+                                      style: const TextStyle(fontSize: 15)),
+                                ))
+                                    .toList(),
+                              ),
+                            ),
+                          // Total price section
+                          if (orderedItems.isNotEmpty)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 12),
+                              child: Text(
+                                'Total: ₱${orderedItems.fold(0.0, (total, item) {
+                                  double price = 0.0;
+
+                                  // Check if the item is in dishes
+                                  final dish = dishes.firstWhere(
+                                        (dish) => dish['name'] == item.key,
+                                    orElse: () => {},  // Return an empty map instead of null
+                                  );
+                                  if (dish.isNotEmpty) {
+                                    price = double.tryParse(dish['price']?.substring(1) ?? '0') ?? 0.0;
+                                  } else {
+                                    // Check if the item is in bilao
+                                    final bilaoItem = bilao.firstWhere(
+                                          (bilao) => bilao['name'] == item.key,
+                                      orElse: () => {},  // Return an empty map instead of null
+                                    );
+                                    if (bilaoItem.isNotEmpty) {
+                                      price = double.tryParse(bilaoItem['price']?.substring(1) ?? '0') ?? 0.0;
+                                    }
+                                  }
+
+                                  return total + (price * item.value); // Add price * quantity
+                                }).toStringAsFixed(2)}',
+                                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          const SizedBox(height: 12),
+                          Text('Select Delivery Option:'),
+                          // Button to toggle between Delivery, Pick Up, and Reservation
+                          ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                // Toggle between 'Delivery', 'Pick Up', 'Reservation'
+                                if (deliveryOption == 'Delivery') {
+                                  deliveryOption = 'Pick Up';
+                                } else if (deliveryOption == 'Pick Up') {
+                                  deliveryOption = 'Reservation';
+                                } else {
+                                  deliveryOption = 'Delivery';
+                                }
+                              });
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFFEFCA6C),
+                              foregroundColor: Colors.black,
+                              minimumSize: const Size.fromHeight(50),
+                            ),
+                            child: Text(deliveryOption), // This will change the button text
+                          ),
+                          const SizedBox(height: 12),
+                          ElevatedButton(
+                            onPressed: () {
+                              _checkout();
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFFEFCA6C),
+                              foregroundColor: Colors.black,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              minimumSize: const Size.fromHeight(50),
+                            ),
+                            child: const Text('Checkout'),
+                          ),
+                        ],
+                      ),
                     ),
-                    const SizedBox(height: 12),
-                    if (orderedItems.isEmpty)
-                      const Text('No items selected.'),
-                    if (orderedItems.isNotEmpty)
-                      Expanded(
-                        child: ListView(
-                          children: orderedItems
-                              .map((item) => ListTile(
-                            title: Text(item.key, style: const TextStyle(fontWeight: FontWeight.bold)),
-                            trailing: Text('x${item.value}', style: const TextStyle(fontSize: 15)),
-                          ))
-                              .toList(),
-                        ),
-                      ),
-                    // Total price section
-                    if (orderedItems.isNotEmpty)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 12),
-                        child: Text(
-                          'Total: ₱${orderedItems.fold(0.0, (total, item) {
-                            final price = double.tryParse(dishes.firstWhere((dish) => dish['name'] == item.key)['price']!.substring(1)) ?? 0;
-                            return total + (price * item.value);
-                          }).toStringAsFixed(2)}',
-                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    const SizedBox(height: 12),
-                    Text('Select Delivery Option:'),
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          if (deliveryOption == 'Delivery') {
-                            deliveryOption = 'Pick Up';
-                          } else if (deliveryOption == 'Pick Up') {
-                            deliveryOption = 'Reservation';
-                          } else {
-                            deliveryOption = 'Delivery';
-                          }
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFEFCA6C),
-                        foregroundColor: Colors.black,
-                        minimumSize: const Size.fromHeight(50),
-                      ),
-                      child: Text(deliveryOption), // Button text changes based on selected option
-                    ),
-                    const SizedBox(height: 12),
-                    ElevatedButton(
-                      onPressed: () {
-                        _checkout();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFEFCA6C),
-                        foregroundColor: Colors.black,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        minimumSize: const Size.fromHeight(50),
-                      ),
-                      child: const Text('Checkout'),
-                    ),
-                  ],
+                  ),
                 ),
               ),
-            ),
-          ),
-        ),
-      ),
+            );
+          },
+        );
+      },
     );
   }
 
-  // Your _drawerItem method here
+
+
+
+
+
   Widget _drawerItem(BuildContext context, String title, String route, IconData icon) {
     return ListTile(
       leading: FaIcon(icon, color: Colors.black, size: 23),
