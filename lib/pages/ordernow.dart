@@ -9,7 +9,7 @@ class Ordernow extends StatefulWidget {
 }
 
 class _OrdernowState extends State<Ordernow> {
-  String selectedCategory = 'Dessert';
+  String selectedCategory = 'Desserts';
   String deliveryOption = 'Delivery';
 
   final Map<String, int> quantities = {
@@ -81,7 +81,7 @@ class _OrdernowState extends State<Ordernow> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
-                children: ['Dishes', 'Bilao', 'Dessert'].map((category) {
+                children: ['Dishes', 'Bilao', 'Desserts'].map((category) {
                   final isSelected = selectedCategory == category;
                   return Expanded(
                     child: GestureDetector(
