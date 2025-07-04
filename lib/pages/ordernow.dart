@@ -9,24 +9,21 @@ class Ordernow extends StatefulWidget {
 }
 
 class _OrdernowState extends State<Ordernow> {
-  String selectedCategory = 'Dishes';
-  String deliveryOption = 'Delivery'; // Default delivery option
+  String selectedCategory = 'Desserts';
+  String deliveryOption = 'Delivery';
+
   final Map<String, int> quantities = {
-    'Lomi': 0,
-    'Sweet & Spicy': 0,
-    'Plain': 0,
-    'Bihon': 0,
-    'Tapsilog': 0,
-    'Hotsilog': 0,
+    'Graham': 0,
+    'Leche Plan': 0,
+    'Graham Bar': 0,
+    'Maja Blanca': 0,
   };
 
   final List<Map<String, String>> dishes = [
-    {'name': 'Lomi', 'price': '₱75.00', 'image': 'assets/images/lomi.jpg'},
-    {'name': 'Sweet & Spicy', 'price': '₱75.00', 'image': 'assets/images/sweet_and_spicy.png'},
-    {'name': 'Plain', 'price': '₱75.00', 'image': 'assets/images/plain.png'},
-    {'name': 'Bihon', 'price': '₱75.00', 'image': 'assets/images/Pancit_Canton_Bihon_Guisado.png'},
-    {'name': 'Tapsilog', 'price': '₱75.00', 'image': 'assets/images/tapsilog.png'},
-    {'name': 'Hotsilog', 'price': '₱75.00', 'image': 'assets/images/hotsilog.png'},
+    {'name': 'Graham', 'price': '₱75.00', 'image': 'assets/images/Dessert.jpg'},
+    {'name': 'Leche Plan', 'price': '₱75.00', 'image': 'assets/images/leche plan.jpg'},
+    {'name': 'Graham Bar', 'price': '₱75.00', 'image': 'assets/images/Graham Bar.jpg'},
+    {'name': 'Maja Blanca', 'price': '₱75.00', 'image': 'assets/images/maja.jpg'},
   ];
 
   @override
@@ -81,7 +78,6 @@ class _OrdernowState extends State<Ordernow> {
         child: Column(
           children: [
             const SizedBox(height: 20),
-            // Category Tabs
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
@@ -114,7 +110,6 @@ class _OrdernowState extends State<Ordernow> {
               ),
             ),
             const SizedBox(height: 16),
-            // Dishes Grid
             Padding(
               padding: const EdgeInsets.only(left: 16, top: 10, right: 16, bottom: 16),
               child: GridView.count(
@@ -208,7 +203,7 @@ class _OrdernowState extends State<Ordernow> {
       builder: (context) => Align(
         alignment: Alignment.centerRight,
         child: FractionallySizedBox(
-          widthFactor: 0.7, // Sidebar width (70% of screen)
+          widthFactor: 0.7,
           child: Material(
             color: Colors.white,
             elevation: 13,
@@ -239,20 +234,22 @@ class _OrdernowState extends State<Ordernow> {
                               .toList(),
                         ),
                       ),
-                    // Total price section
                     if (orderedItems.isNotEmpty)
                       Padding(
                         padding: const EdgeInsets.only(top: 12),
                         child: Text(
                           'Total: ₱${orderedItems.fold(0.0, (total, item) {
-                            final price = double.tryParse(dishes.firstWhere((dish) => dish['name'] == item.key)['price']!.substring(1)) ?? 0;
+                            final price = double.tryParse(
+                              dishes.firstWhere((dish) => dish['name'] == item.key)['price']!.substring(1),
+                            ) ??
+                                0;
                             return total + (price * item.value);
                           }).toStringAsFixed(2)}',
                           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                       ),
                     const SizedBox(height: 12),
-                    Text('Select Delivery Option:'),
+                    const Text('Select Delivery Option:'),
                     ElevatedButton(
                       onPressed: () {
                         setState(() {
@@ -270,7 +267,7 @@ class _OrdernowState extends State<Ordernow> {
                         foregroundColor: Colors.black,
                         minimumSize: const Size.fromHeight(50),
                       ),
-                      child: Text(deliveryOption), // Button text changes based on selected option
+                      child: Text(deliveryOption),
                     ),
                     const SizedBox(height: 12),
                     ElevatedButton(
@@ -297,7 +294,6 @@ class _OrdernowState extends State<Ordernow> {
     );
   }
 
-  // Your _drawerItem method here
   Widget _drawerItem(BuildContext context, String title, String route, IconData icon) {
     return ListTile(
       leading: FaIcon(icon, color: Colors.black, size: 23),
@@ -375,3 +371,4 @@ class OffsetFloatingActionButtonLocation extends FloatingActionButtonLocation {
     return Offset(x, y);
   }
 }
+
