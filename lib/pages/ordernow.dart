@@ -8,7 +8,7 @@ class Ordernow extends StatefulWidget {
   State<Ordernow> createState() => _OrdernowState();
 }
 
-class _OrdernowState extends State<Ordernow> {
+class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
   String selectedCategory = 'Dishes';
   String deliveryOption = 'Delivery';
   final Map<String, int> quantities = {
@@ -58,6 +58,43 @@ class _OrdernowState extends State<Ordernow> {
       'image': 'assets/images/chami_bilao.png',
     },
   ];
+
+
+  late AnimationController _controller;
+  late Animation<Offset> _slideAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 250),
+    );
+
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(1.0, 0.0),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    ));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _resetAnimation() {
+    _controller.reset();
+    _controller.forward();
+  }
+
+  void _reverseAnimation() {
+    _controller.reverse();
+  }
+
 
 
   TextEditingController addressController = TextEditingController();
@@ -152,10 +189,10 @@ class _OrdernowState extends State<Ordernow> {
             const SizedBox(height: 16),
 
             selectedCategory == 'Dishes'
-                ? _buildDishesGrid(isMobile)  // If "Dishes" is selected, show the Dishes Grid
+                ? _buildDishesGrid(isMobile)  //show the Dishes Grid when selected
                 : selectedCategory == 'Bilao'
-                ? _buildBilaoGrid(isMobile)  // If "Bilao" is selected, show the Bilao Grid
-                : Container(),  // For "Desserts", we leave it empty for now
+                ? _buildBilaoGrid(isMobile)  // show the Bilao Grid when selected
+                : Container(),  // desserts empty for now
           ],
         ),
       ),
@@ -409,117 +446,134 @@ class _OrdernowState extends State<Ordernow> {
   void _showSummarySidebar(BuildContext context) {
     final orderedItems = quantities.entries.where((e) => e.value > 0).toList();
 
+    _resetAnimation();
+
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (context) {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
             return Align(
               alignment: Alignment.centerRight,
-              child: FractionallySizedBox(
-                widthFactor: 0.7,
-                child: Material(
-                  color: Colors.white,
-                  elevation: 13,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.horizontal(left: Radius.circular(10)),
-                  ),
-                  child: SafeArea(
-                    child: Padding(
-                      padding: const EdgeInsets.all(24),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Your Orders',
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 12),
-                          if (orderedItems.isEmpty)
-                            const Text('No items selected.'),
-                          if (orderedItems.isNotEmpty)
-                            Expanded(
-                              child: ListView(
-                                children: orderedItems
-                                    .map((item) => ListTile(
-                                  title: Text(item.key,
-                                      style: const TextStyle(fontWeight: FontWeight.bold)),
-                                  trailing: Text('x${item.value}',
-                                      style: const TextStyle(fontSize: 15)),
-                                ))
-                                    .toList(),
+              child: SlideTransition(
+                position: _slideAnimation,
+                child: FractionallySizedBox(
+                  alignment: Alignment.centerRight,
+                  widthFactor: 1.0,
+                  child: Material(
+                    color: Colors.white,
+                    elevation: 13,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.horizontal(left: Radius.circular(10)),
+                    ),
+                    child: SafeArea(
+                      child: Padding(
+                        padding: const EdgeInsets.all(24),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: IconButton(
+                                icon: Icon(FontAwesomeIcons.arrowLeft),
+                                iconSize: 30,
+                                onPressed: () {
+                                  _reverseAnimation();
+                                  Future.delayed(const Duration(milliseconds: 250), () {
+                                    Navigator.pop(context); // Close the sidebar
+                                  });
+                                },
                               ),
                             ),
-                          // Total price section
-                          if (orderedItems.isNotEmpty)
-                            Padding(
-                              padding: const EdgeInsets.only(top: 12),
-                              child: Text(
-                                'Total: ₱${orderedItems.fold(0.0, (total, item) {
-                                  double price = 0.0;
+                            const Text(
+                              'Your Orders',
+                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: 12),
+                            if (orderedItems.isEmpty)
+                              const Text('No items selected.'),
+                            if (orderedItems.isNotEmpty)
+                              Expanded(
+                                child: ListView(
+                                  children: orderedItems
+                                      .map((item) => ListTile(
+                                    title: Text(item.key,
+                                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                                    trailing: Text('x${item.value}',
+                                        style: const TextStyle(fontSize: 15)),
+                                  ))
+                                      .toList(),
+                                ),
+                              ),
+                            // Total price section
+                            if (orderedItems.isNotEmpty)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 12),
+                                child: Text(
+                                  'Total: ₱${orderedItems.fold(0.0, (total, item) {
+                                    double price = 0.0;
 
-                                  // Check if the item is in dishes
-                                  final dish = dishes.firstWhere(
-                                        (dish) => dish['name'] == item.key,
-                                    orElse: () => {},
-                                  );
-                                  if (dish.isNotEmpty) {
-                                    price = double.tryParse(dish['price']?.substring(1) ?? '0') ?? 0.0;
-                                  } else {
-                                    // Check if the item is in bilao
-                                    final bilaoItem = bilao.firstWhere(
-                                          (bilao) => bilao['name'] == item.key,
+                                    final dish = dishes.firstWhere(
+                                          (dish) => dish['name'] == item.key,
                                       orElse: () => {},
                                     );
-                                    if (bilaoItem.isNotEmpty) {
-                                      price = double.tryParse(bilaoItem['price']?.substring(1) ?? '0') ?? 0.0;
+                                    if (dish.isNotEmpty) {
+                                      price = double.tryParse(dish['price']?.substring(1) ?? '0') ?? 0.0;
+                                    } else {
+                                      final bilaoItem = bilao.firstWhere(
+                                            (bilao) => bilao['name'] == item.key,
+                                        orElse: () => {},
+                                      );
+                                      if (bilaoItem.isNotEmpty) {
+                                        price =
+                                            double.tryParse(bilaoItem['price']?.substring(1) ?? '0') ?? 0.0;
+                                      }
                                     }
+
+                                    return total + (price * item.value);
+                                  }).toStringAsFixed(2)}',
+                                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            const SizedBox(height: 12),
+                            Text('Select Delivery Option:'),
+                            ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  if (deliveryOption == 'Delivery') {
+                                    deliveryOption = 'Pick Up';
+                                  } else if (deliveryOption == 'Pick Up') {
+                                    deliveryOption = 'Reservation';
+                                  } else {
+                                    deliveryOption = 'Delivery';
                                   }
-
-                                  return total + (price * item.value);
-                                }).toStringAsFixed(2)}',
-                                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                });
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFFEFCA6C),
+                                foregroundColor: Colors.black,
+                                minimumSize: const Size.fromHeight(50),
                               ),
+                              child: Text(deliveryOption),
                             ),
-                          const SizedBox(height: 12),
-                          Text('Select Delivery Option:'),
-
-                          ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                // Toggle between 'Delivery', 'Pick Up', 'Reservation'
-                                if (deliveryOption == 'Delivery') {
-                                  deliveryOption = 'Pick Up';
-                                } else if (deliveryOption == 'Pick Up') {
-                                  deliveryOption = 'Reservation';
-                                } else {
-                                  deliveryOption = 'Delivery';
-                                }
-                              });
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFFEFCA6C),
-                              foregroundColor: Colors.black,
-                              minimumSize: const Size.fromHeight(50),
-                            ),
-                            child: Text(deliveryOption),
-                          ),
-                          const SizedBox(height: 12),
-                          ElevatedButton(
-                            onPressed: () {
-                              _checkout();
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFFEFCA6C),
-                              foregroundColor: Colors.black,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
+                            const SizedBox(height: 12),
+                            ElevatedButton(
+                              onPressed: () {
+                                _checkout();
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFFEFCA6C),
+                                foregroundColor: Colors.black,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                minimumSize: const Size.fromHeight(50),
                               ),
-                              minimumSize: const Size.fromHeight(50),
+                              child: const Text('Checkout'),
                             ),
-                            child: const Text('Checkout'),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
