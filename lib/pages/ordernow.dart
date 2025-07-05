@@ -35,28 +35,10 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
 
 
   final List<Map<String, String>> bilao = [
-    {
-      'name': 'Pancit Bilao',
-      'price': '₱250.00',
-      'image': 'assets/images/Pancit_Canton_Bihon_Guisado.png',
-    },
-    {
-      'name': 'Spaghetti Bilao',
-      'price': '₱280.00',
-      'image': 'assets/images/Spaghetti.png',
-
-    },
-    {
-      'name': 'Palabok Bilao',
-      'price': '₱300.00',
-      'image': 'assets/images/palabok_bilao.png',
-
-    },
-    {
-      'name': 'Chami Bilao',
-      'price': '₱270.00',
-      'image': 'assets/images/chami_bilao.png',
-    },
+    {'name': 'Pancit Bilao', 'price': '₱250.00', 'image': 'assets/images/Pancit_Canton_Bihon_Guisado.png',},
+    {'name': 'Spaghetti Bilao', 'price': '₱280.00', 'image': 'assets/images/Spaghetti.png',},
+    {'name': 'Palabok Bilao', 'price': '₱300.00', 'image': 'assets/images/palabok_bilao.png',},
+    {'name': 'Chami Bilao', 'price': '₱270.00', 'image': 'assets/images/chami_bilao.png',},
   ];
 
 
@@ -585,11 +567,6 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
       },
     );
   }
-
-
-
-
-
 
   Widget _drawerItem(BuildContext context, String title, String route, IconData icon) {
     return ListTile(
