@@ -36,6 +36,8 @@ dependencies:
   font_awesome_flutter: ^10.0.0
   cupertino_icons: ^1.0.8
 
+  image_picker: ^0.8.4+2
+
 
 dev_dependencies:
   flutter_test:
@@ -47,6 +49,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -67,6 +70,7 @@ flutter:
   - assets/images/hotsilog.png
   - assets/images/chami_bilao.png
   - assets/images/palabok_bilao.png
+  - assets/images/gcash.jpg
 
 
   #uses-material-design: true

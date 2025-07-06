@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 
 class Ordernow extends StatefulWidget {
   const Ordernow({super.key});
@@ -11,6 +14,21 @@ class Ordernow extends StatefulWidget {
 class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
   String selectedCategory = 'Dishes';
   String deliveryOption = 'Delivery';
+  final ImagePicker _picker = ImagePicker();
+  File? _image;
+
+  Future<void> _pickImage() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        _image = File(image.path);
+      });
+    } else {
+      print("No image selected.");
+    }
+  }
+
+
   final Map<String, int> quantities = {
     'Lomi': 0,
     'Sweet & Spicy': 0,
@@ -26,19 +44,51 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
 
   final List<Map<String, String>> dishes = [
     {'name': 'Lomi', 'price': '₱75.00', 'image': 'assets/images/lomi.jpg'},
-    {'name': 'Sweet & Spicy', 'price': '₱75.00', 'image': 'assets/images/sweet_and_spicy.png'},
+    {
+      'name': 'Sweet & Spicy',
+      'price': '₱75.00',
+      'image': 'assets/images/sweet_and_spicy.png'
+    },
     {'name': 'Plain', 'price': '₱75.00', 'image': 'assets/images/plain.png'},
-    {'name': 'Bihon', 'price': '₱75.00', 'image': 'assets/images/Pancit_Canton_Bihon_Guisado.png'},
-    {'name': 'Tapsilog', 'price': '₱75.00', 'image': 'assets/images/tapsilog.png'},
-    {'name': 'Hotsilog', 'price': '₱75.00', 'image': 'assets/images/hotsilog.png'},
+    {
+      'name': 'Bihon',
+      'price': '₱75.00',
+      'image': 'assets/images/Pancit_Canton_Bihon_Guisado.png'
+    },
+    {
+      'name': 'Tapsilog',
+      'price': '₱75.00',
+      'image': 'assets/images/tapsilog.png'
+    },
+    {
+      'name': 'Hotsilog',
+      'price': '₱75.00',
+      'image': 'assets/images/hotsilog.png'
+    },
   ];
 
 
   final List<Map<String, String>> bilao = [
-    {'name': 'Pancit Bilao', 'price': '₱250.00', 'image': 'assets/images/Pancit_Canton_Bihon_Guisado.png',},
-    {'name': 'Spaghetti Bilao', 'price': '₱280.00', 'image': 'assets/images/Spaghetti.png',},
-    {'name': 'Palabok Bilao', 'price': '₱300.00', 'image': 'assets/images/palabok_bilao.png',},
-    {'name': 'Chami Bilao', 'price': '₱270.00', 'image': 'assets/images/chami_bilao.png',},
+    {
+      'name': 'Pancit Bilao',
+      'price': '₱250.00',
+      'image': 'assets/images/Pancit_Canton_Bihon_Guisado.png',
+    },
+    {
+      'name': 'Spaghetti Bilao',
+      'price': '₱280.00',
+      'image': 'assets/images/Spaghetti.png',
+    },
+    {
+      'name': 'Palabok Bilao',
+      'price': '₱300.00',
+      'image': 'assets/images/palabok_bilao.png',
+    },
+    {
+      'name': 'Chami Bilao',
+      'price': '₱270.00',
+      'image': 'assets/images/chami_bilao.png',
+    },
   ];
 
 
@@ -50,7 +100,7 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 250),
+      duration: const Duration(milliseconds: 400),
     );
 
     _slideAnimation = Tween<Offset>(
@@ -73,12 +123,6 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
     _controller.forward();
   }
 
-  void _reverseAnimation() {
-    _controller.reverse();
-  }
-
-
-
   TextEditingController addressController = TextEditingController();
 
   @override
@@ -99,10 +143,11 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
         actions: isMobile
             ? [
           Builder(
-            builder: (context) => IconButton(
-              icon: const Icon(FontAwesomeIcons.bars, color: Colors.black),
-              onPressed: () => Scaffold.of(context).openEndDrawer(),
-            ),
+            builder: (context) =>
+                IconButton(
+                  icon: const Icon(FontAwesomeIcons.bars, color: Colors.black),
+                  onPressed: () => Scaffold.of(context).openEndDrawer(),
+                ),
           ),
         ]
             : null,
@@ -114,14 +159,20 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
           padding: const EdgeInsets.symmetric(horizontal: 12),
           children: [
             const SizedBox(height: 85),
-            _drawerItem(context, 'Home', '/landingpage', FontAwesomeIcons.house),
-            _drawerItem(context, 'Order Now', '/OrderNow', FontAwesomeIcons.cartPlus),
-            _drawerItem(context, 'Contact Us', '/contactus', FontAwesomeIcons.phone),
-            _drawerItem(context, 'Notifications', '/notifications', FontAwesomeIcons.bell),
+            _drawerItem(
+                context, 'Home', '/landingpage', FontAwesomeIcons.house),
+            _drawerItem(
+                context, 'Order Now', '/OrderNow', FontAwesomeIcons.cartPlus),
+            _drawerItem(
+                context, 'Contact Us', '/contactus', FontAwesomeIcons.phone),
+            _drawerItem(context, 'Notifications', '/notifications',
+                FontAwesomeIcons.bell),
             _drawerItem(context, 'Account', '/profile', FontAwesomeIcons.user),
             ListTile(
-              leading: const Icon(FontAwesomeIcons.arrowRightFromBracket, color: Colors.black),
-              title: const Text('Logout', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+              leading: const Icon(
+                  FontAwesomeIcons.arrowRightFromBracket, color: Colors.black),
+              title: const Text('Logout',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
               onTap: () {
                 Navigator.pop(context);
                 _showLogoutModal(context);
@@ -148,7 +199,8 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         margin: const EdgeInsets.symmetric(horizontal: 5),
                         decoration: BoxDecoration(
-                          color: isSelected ? const Color(0xFFEFCA6C) : Colors.white,
+                          color: isSelected ? const Color(0xFFEFCA6C) : Colors
+                              .white,
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(color: Colors.black26),
                         ),
@@ -157,7 +209,8 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
                             category,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: isSelected ? Colors.black : Colors.grey[600],
+                              color: isSelected ? Colors.black : Colors
+                                  .grey[600],
                             ),
                           ),
                         ),
@@ -171,10 +224,11 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
             const SizedBox(height: 16),
 
             selectedCategory == 'Dishes'
-                ? _buildDishesGrid(isMobile)  //show the Dishes Grid when selected
+                ? _buildDishesGrid(
+                isMobile) //show the Dishes Grid when selected
                 : selectedCategory == 'Bilao'
-                ? _buildBilaoGrid(isMobile)  // show the Bilao Grid when selected
-                : Container(),  // desserts empty for now
+                ? _buildBilaoGrid(isMobile) // show the Bilao Grid when selected
+                : Container(), // desserts empty for now
           ],
         ),
       ),
@@ -225,13 +279,15 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
                 Image.asset(dish['image']!, height: 90, fit: BoxFit.cover),
                 const SizedBox(height: 8),
                 Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                Text(dish['price']!, style: const TextStyle(color: Colors.black54)),
+                Text(dish['price']!,
+                    style: const TextStyle(color: Colors.black54)),
                 const SizedBox(height: 1),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
-                      icon: const FaIcon(FontAwesomeIcons.circleMinus, color: Colors.black),
+                      icon: const FaIcon(
+                          FontAwesomeIcons.circleMinus, color: Colors.black),
                       onPressed: () {
                         setState(() {
                           if (quantities[name]! > 0) {
@@ -242,7 +298,8 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
                     ),
                     Text('${quantities[name]}'),
                     IconButton(
-                      icon: const FaIcon(FontAwesomeIcons.circlePlus, color: Colors.black),
+                      icon: const FaIcon(
+                          FontAwesomeIcons.circlePlus, color: Colors.black),
                       onPressed: () {
                         setState(() {
                           quantities[name] = quantities[name]! + 1;
@@ -297,7 +354,8 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
-                      icon: const FaIcon(FontAwesomeIcons.circleMinus, color: Colors.black,),
+                      icon: const FaIcon(
+                        FontAwesomeIcons.circleMinus, color: Colors.black,),
                       onPressed: () {
                         setState(() {
                           if (quantities[name]! > 0) {
@@ -308,7 +366,8 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
                     ),
                     Text('${quantities[name]}'),
                     IconButton(
-                      icon: const FaIcon(FontAwesomeIcons.circlePlus, color: Colors.black,),
+                      icon: const FaIcon(
+                        FontAwesomeIcons.circlePlus, color: Colors.black,),
                       onPressed: () {
                         setState(() {
                           quantities[name] = quantities[name]! + 1;
@@ -326,7 +385,6 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
   }
 
 
-
   //Checkout modal
   void _checkout() {
     if (_hashItems()) {
@@ -342,25 +400,28 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
   void _showCustomSnackBar(String message) {
     final overlay = Overlay.of(context);
     final overlayEntry = OverlayEntry(
-      builder: (context) => Positioned(
-        bottom: 100,
-        left: 16,
-        right: 16,
-        child: Material(
-          color: Colors.transparent,
-          child: Container(
-            padding: EdgeInsets.symmetric(vertical: 12, horizontal: 45),
-            decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.8),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Text(
-              message,
-              style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+      builder: (context) =>
+          Positioned(
+            bottom: 100,
+            left: 16,
+            right: 16,
+            child: Material(
+              color: Colors.transparent,
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 45),
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.8),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  message,
+                  style: TextStyle(color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
             ),
           ),
-        ),
-      ),
     );
 
     overlay.insert(overlayEntry);
@@ -371,59 +432,201 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
   }
 
 
-  bool _hashItems(){
+  bool _hashItems() {
     return quantities.values.any((quantity) => quantity > 0);
   }
 
+
   void _showCheckoutModal() {
+    final fullNameController = TextEditingController();
+    final phoneController = TextEditingController();
+    final addressController = TextEditingController();
+    String selectedTime = '';
+
+    Future<void> _selectTime(BuildContext context) async {
+      final TimeOfDay? picked = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+      );
+      if (picked != null && picked != TimeOfDay.now()) {
+        selectedTime = "${picked.hour}:${picked.minute}";
+      }
+    }
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.white,
-          content: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 1, vertical: 23,),
-                margin: EdgeInsets.only(bottom: 24),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Color(0xFFEFCA6C)
-                ),
-              ),
-              if (deliveryOption == 'Delivery')
-                TextField(
-                  controller: addressController,
-                  decoration: InputDecoration(
-                    labelText: 'Enter Delivery Address',
-                    border: OutlineInputBorder(),
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Align(
+              alignment: Alignment.center,
+              child: SizedBox(
+                width: 330,
+                // Set a fixed width for the modal here (adjust as needed)
+                child: Material(
+                  color: Colors.white,
+                  elevation: 13,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.horizontal(
+                      left: Radius.circular(10), right: Radius.circular(10),),
+                  ),
+                  child: SafeArea(
+                    child: Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 70, vertical: 13),
+                            margin: EdgeInsets.only(bottom: 24),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                              border: Border.all(color: Colors.black26),
+                              color: Color(0xFFEFCA6C),
+                            ),
+                            child: const Text(
+                              'Delivery',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 15),
+                            ),
+                          ),
+                          // Full Name
+                          TextField(
+                            controller: fullNameController,
+                            decoration: InputDecoration(
+                              labelText: 'Full Name',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          // Phone Number
+                          TextField(
+                            controller: phoneController,
+                            decoration: InputDecoration(
+                              labelText: 'Phone Number',
+                              border: OutlineInputBorder(),
+                            ),
+                            keyboardType: TextInputType.phone,
+                          ),
+                          const SizedBox(height: 16),
+                          // Delivery Address
+                          TextField(
+                            controller: addressController,
+                            decoration: InputDecoration(
+                              labelText: 'Delivery Address',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          // Delivery Time Picker
+                          GestureDetector(
+                            onTap: () => _selectTime(context),
+                            child: AbsorbPointer(
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  labelText: selectedTime.isEmpty
+                                      ? 'Select Delivery Time'
+                                      : selectedTime,
+                                  border: OutlineInputBorder(),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Scan GCASH QR Code',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              if (deliveryOption == 'Delivery')
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(height: 10),
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 10.0), // Adjust padding here
+                                      child: Image.asset(
+                                        'assets/images/gcash.jpg',
+                                        width: 120, // Reduce the size of the QR code image if needed
+                                        height: 120,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                  ],
+                                ),
+
+                              // Add space between the QR and the button with Flexible
+                              const SizedBox(width: 10),
+
+                              Flexible( // Ensure the button and uploaded image take up remaining space
+                                child: Column(
+                                  children: [
+                                    ElevatedButton(
+                                      onPressed: () async {
+                                        await _pickImage();
+                                        setState(() {});
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: const Color(0xFFEFCA6C),
+                                      ),
+                                      child: const Text('Upload Payment', style: TextStyle(fontSize: 12.5, color: Colors.black),),
+                                    ),
+
+                                    const SizedBox(height: 10),
+                                    // Display the selected image
+                                    if (_image != null)
+                                      Image.file(
+                                        _image!,
+                                        height: 100,
+                                        width: 100,
+                                        fit: BoxFit.cover,
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          const SizedBox(height: 20),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context); // Close modal
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xFFEFCA6C),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              minimumSize: Size(500, 40),
+                            ),
+                            child: const Text(
+                              'Place Order',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFEFCA6C)),
-                child: const Text('Cancel', style: TextStyle(color: Colors.white),),
               ),
-              ElevatedButton(
-                onPressed: _hashItems() ? () {
-                  Navigator.pop(context); // Close the modal
-                } : null,
-                style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFEFCA6C)),
-                child: const Text('Place Order', style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                )),
-              ),
-            ],
-          ),
+            );
+          },
         );
       },
     );
   }
+
 
   void _showSummarySidebar(BuildContext context) {
     final orderedItems = quantities.entries.where((e) => e.value > 0).toList();
@@ -432,7 +635,7 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
 
     showDialog(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: true,
       builder: (context) {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
@@ -442,12 +645,13 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
                 position: _slideAnimation,
                 child: FractionallySizedBox(
                   alignment: Alignment.centerRight,
-                  widthFactor: 1.0,
+                  widthFactor: 0.8,
                   child: Material(
                     color: Colors.white,
                     elevation: 13,
                     shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.horizontal(left: Radius.circular(10)),
+                      borderRadius: BorderRadius.horizontal(left: Radius
+                          .circular(10)),
                     ),
                     child: SafeArea(
                       child: Padding(
@@ -455,105 +659,151 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Align(
-                              alignment: Alignment.topLeft,
-                              child: IconButton(
-                                icon: Icon(FontAwesomeIcons.arrowLeft),
-                                iconSize: 30,
-                                onPressed: () {
-                                  _reverseAnimation();
-                                  Future.delayed(const Duration(milliseconds: 250), () {
-                                    Navigator.pop(context); // Close the sidebar
-                                  });
-                                },
-                              ),
-                            ),
-                            const Text(
-                              'Your Orders',
-                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(height: 12),
+                            Text('Order Summary', style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),),
+                            SizedBox(height: 12),
                             if (orderedItems.isEmpty)
                               const Text('No items selected.'),
                             if (orderedItems.isNotEmpty)
                               Expanded(
                                 child: ListView(
-                                  children: orderedItems
-                                      .map((item) => ListTile(
-                                    title: Text(item.key,
-                                        style: const TextStyle(fontWeight: FontWeight.bold)),
-                                    trailing: Text('x${item.value}',
-                                        style: const TextStyle(fontSize: 15)),
-                                  ))
-                                      .toList(),
+                                  children: orderedItems.map((item) {
+                                    final itemName = item.key;
+                                    final itemQuantity = item.value;
+                                    final itemPrice = _getItemPrice(itemName);
+                                    final totalItemPrice = itemPrice *
+                                        itemQuantity;
+
+                                    return ListTile(
+                                      title: Text(
+                                        itemName,
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Color(0xFF5F6D69)),
+                                      ),
+                                      subtitle: Text(
+                                        '₱${itemPrice.toStringAsFixed(2)} each',
+                                        style: const TextStyle(fontSize: 13,
+                                            color: Color(0xFF5F6D69)),
+                                      ),
+                                      trailing: Text(
+                                        'x$itemQuantity - ₱${totalItemPrice
+                                            .toStringAsFixed(2)}',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15,
+                                            color: Color(0xFF5F6D69)),
+                                      ),
+                                    );
+                                  }).toList(),
                                 ),
                               ),
                             // Total price section
                             if (orderedItems.isNotEmpty)
                               Padding(
-                                padding: const EdgeInsets.only(top: 12),
-                                child: Text(
-                                  'Total: ₱${orderedItems.fold(0.0, (total, item) {
-                                    double price = 0.0;
+                                padding: const EdgeInsets.only(top: 150),
+                                child: Column(
+                                  children: [
+                                    Text('Total price',
+                                      style: const TextStyle(fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(
+                                      '₱${orderedItems.fold(0.0, (total, item) {
+                                        double price = 0.0;
 
-                                    final dish = dishes.firstWhere(
-                                          (dish) => dish['name'] == item.key,
-                                      orElse: () => {},
-                                    );
-                                    if (dish.isNotEmpty) {
-                                      price = double.tryParse(dish['price']?.substring(1) ?? '0') ?? 0.0;
-                                    } else {
-                                      final bilaoItem = bilao.firstWhere(
-                                            (bilao) => bilao['name'] == item.key,
-                                        orElse: () => {},
-                                      );
-                                      if (bilaoItem.isNotEmpty) {
-                                        price =
-                                            double.tryParse(bilaoItem['price']?.substring(1) ?? '0') ?? 0.0;
-                                      }
-                                    }
+                                        final dish = dishes.firstWhere(
+                                              (dish) =>
+                                          dish['name'] == item.key,
+                                          orElse: () => {},
+                                        );
+                                        if (dish.isNotEmpty) {
+                                          price = double.tryParse(
+                                              dish['price']?.substring(1) ??
+                                                  '0') ?? 0.0;
+                                        } else {
+                                          final bilaoItem = bilao.firstWhere(
+                                                (bilao) =>
+                                            bilao['name'] == item.key,
+                                            orElse: () => {},
+                                          );
+                                          if (bilaoItem.isNotEmpty) {
+                                            price =
+                                                double.tryParse(
+                                                    bilaoItem['price']
+                                                        ?.substring(1) ??
+                                                        '0') ?? 0.0;
+                                          }
+                                        }
 
-                                    return total + (price * item.value);
-                                  }).toStringAsFixed(2)}',
-                                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                        return total + (price * item.value);
+                                      }).toStringAsFixed(2)}',
+                                      style: TextStyle(fontSize: 20),),
+                                    SizedBox(height: 20,)
+                                  ],
                                 ),
+
                               ),
-                            const SizedBox(height: 12),
-                            Text('Select Delivery Option:'),
-                            ElevatedButton(
-                              onPressed: () {
-                                setState(() {
-                                  if (deliveryOption == 'Delivery') {
-                                    deliveryOption = 'Pick Up';
-                                  } else if (deliveryOption == 'Pick Up') {
-                                    deliveryOption = 'Reservation';
-                                  } else {
-                                    deliveryOption = 'Delivery';
-                                  }
-                                });
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFFEFCA6C),
-                                foregroundColor: Colors.black,
-                                minimumSize: const Size.fromHeight(50),
-                              ),
-                              child: Text(deliveryOption),
-                            ),
-                            const SizedBox(height: 12),
-                            ElevatedButton(
-                              onPressed: () {
-                                _checkout();
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFFEFCA6C),
-                                foregroundColor: Colors.black,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        if (deliveryOption == 'Delivery') {
+                                          deliveryOption = 'Pick Up';
+                                        } else
+                                        if (deliveryOption == 'Pick Up') {
+                                          deliveryOption = 'Reservation';
+                                        } else {
+                                          deliveryOption = 'Delivery';
+                                        }
+                                      });
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color(0xFFEFCA6C),
+                                      foregroundColor: Colors.black,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      minimumSize: const Size.fromHeight(55),
+                                    ),
+                                    child: Text(
+                                      deliveryOption, style: TextStyle(
+                                      fontSize: deliveryOption == 'Reservation'
+                                          ? 11.7
+                                          : 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),),
+                                  ),
                                 ),
-                                minimumSize: const Size.fromHeight(50),
-                              ),
-                              child: const Text('Checkout'),
+
+                                SizedBox(width: 13,),
+
+                                Expanded(
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      _checkout();
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color(0xFFEFCA6C),
+                                      foregroundColor: Colors.black,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      minimumSize: const Size.fromHeight(55),
+                                    ),
+                                    child: const Text(
+                                      'Checkout', style: TextStyle(
+                                        fontWeight: FontWeight.bold
+                                    ),),
+                                  ),
+                                )
+
+                              ],
                             ),
+
                           ],
                         ),
                       ),
@@ -567,6 +817,25 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
       },
     );
   }
+
+
+  double _getItemPrice(String itemName) {
+    double price = 0.0;
+    final dish = dishes.firstWhere((dish) => dish['name'] == itemName,
+        orElse: () => {});
+    if (dish.isNotEmpty) {
+      price = double.tryParse(dish['price']?.substring(1) ?? '0') ?? 0.0;
+    } else {
+      final bilaoItem = bilao.firstWhere((bilao) => bilao['name'] == itemName,
+          orElse: () => {});
+      if (bilaoItem.isNotEmpty) {
+        price = double.tryParse(bilaoItem['price']?.substring(1) ?? '0') ?? 0.0;
+      }
+    }
+    return price;
+  }
+
+}
 
   Widget _drawerItem(BuildContext context, String title, String route, IconData icon) {
     return ListTile(
@@ -623,7 +892,7 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
       ),
     );
   }
-}
+
 
 class OffsetFloatingActionButtonLocation extends FloatingActionButtonLocation {
   final double xOffset;
