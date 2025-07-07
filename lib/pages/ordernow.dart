@@ -40,55 +40,33 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
     'Spaghetti Bilao': 0,
     'Palabok Bilao': 0,
     'Chami Bilao': 0,
+    'Graham': 0,
+    'Leche Plan': 0,
+    'Graham Bar': 0,
+    'Maja Blanca': 0,
   };
 
   final List<Map<String, String>> dishes = [
     {'name': 'Lomi', 'price': '₱75.00', 'image': 'assets/images/lomi.jpg'},
-    {
-      'name': 'Sweet & Spicy',
-      'price': '₱75.00',
-      'image': 'assets/images/sweet_and_spicy.png'
-    },
+    {'name': 'Sweet & Spicy', 'price': '₱75.00', 'image': 'assets/images/sweet_and_spicy.png'},
     {'name': 'Plain', 'price': '₱75.00', 'image': 'assets/images/plain.png'},
-    {
-      'name': 'Bihon',
-      'price': '₱75.00',
-      'image': 'assets/images/Pancit_Canton_Bihon_Guisado.png'
-    },
-    {
-      'name': 'Tapsilog',
-      'price': '₱75.00',
-      'image': 'assets/images/tapsilog.png'
-    },
-    {
-      'name': 'Hotsilog',
-      'price': '₱75.00',
-      'image': 'assets/images/hotsilog.png'
-    },
+    {'name': 'Bihon', 'price': '₱75.00', 'image': 'assets/images/Pancit_Canton_Bihon_Guisado.png'},
+    {'name': 'Tapsilog', 'price': '₱75.00', 'image': 'assets/images/tapsilog.png'},
+    {'name': 'Hotsilog', 'price': '₱75.00', 'image': 'assets/images/hotsilog.png'},
   ];
 
-
   final List<Map<String, String>> bilao = [
-    {
-      'name': 'Pancit Bilao',
-      'price': '₱250.00',
-      'image': 'assets/images/Pancit_Canton_Bihon_Guisado.png',
-    },
-    {
-      'name': 'Spaghetti Bilao',
-      'price': '₱280.00',
-      'image': 'assets/images/Spaghetti.png',
-    },
-    {
-      'name': 'Palabok Bilao',
-      'price': '₱300.00',
-      'image': 'assets/images/palabok_bilao.png',
-    },
-    {
-      'name': 'Chami Bilao',
-      'price': '₱270.00',
-      'image': 'assets/images/chami_bilao.png',
-    },
+    {'name': 'Pancit Bilao', 'price': '₱250.00', 'image': 'assets/images/Pancit_Canton_Bihon_Guisado.png',},
+    {'name': 'Spaghetti Bilao', 'price': '₱280.00', 'image': 'assets/images/Spaghetti.png',},
+    {'name': 'Palabok Bilao', 'price': '₱300.00', 'image': 'assets/images/palabok_bilao.png',},
+    {'name': 'Chami Bilao', 'price': '₱270.00', 'image': 'assets/images/chami_bilao.png',},
+  ];
+
+  final List<Map<String, String>> desserts = [
+    {'name': 'Graham', 'price': '₱75.00', 'image': 'assets/images/Graham.png'},
+    {'name': 'Leche Plan', 'price': '₱75.00', 'image': 'assets/images/leche-flan.png'},
+    {'name': 'Graham Bar', 'price': '₱75.00', 'image': 'assets/images/graham-bar.png'},
+    {'name': 'Maja Blanca', 'price': '₱75.00', 'image': 'assets/images/maja.jpg'},
   ];
 
 
@@ -227,7 +205,9 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
                 ? _buildDishesGrid(
                 isMobile) //show the Dishes Grid when selected
                 : selectedCategory == 'Bilao'
-                ? _buildBilaoGrid(isMobile) // show the Bilao Grid when selected
+                ? _buildBilaoGrid(isMobile)
+                : selectedCategory == 'Desserts'
+                ? _buildDessertsGrid(isMobile)// show the Bilao Grid when selected
                 : Container(), // desserts empty for now
           ],
         ),
@@ -383,6 +363,77 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
       ),
     );
   }
+
+
+  Widget _buildDessertsGrid(bool isMobile) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, top: 10, right: 16, bottom: 16),
+      child: GridView.count(
+        crossAxisCount: isMobile ? 2 : 3,
+        mainAxisSpacing: 12,
+        crossAxisSpacing: 12,
+        childAspectRatio: 0.69,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        children: desserts.map((dessert) {
+          final name = dessert['name']!;
+          return Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 4,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(height: 1),
+                Image.asset(dessert['image']!, height: 90, fit: BoxFit.cover),
+                const SizedBox(height: 8),
+                Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
+                Text(dessert['price']!, style: const TextStyle(color: Colors.black54)),
+                const SizedBox(height: 1),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      icon: const FaIcon(FontAwesomeIcons.circleMinus, color: Colors.black),
+                      onPressed: () {
+                        setState(() {
+                          if (quantities[name]! > 0) {
+                            quantities[name] = quantities[name]! - 1;
+                          }
+                        });
+                      },
+                    ),
+                    Text('${quantities[name]}'),
+                    IconButton(
+                      icon: const FaIcon(FontAwesomeIcons.circlePlus, color: Colors.black),
+                      onPressed: () {
+                        setState(() {
+                          quantities[name] = quantities[name]! + 1;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+
+
+
+
 
 
   //Checkout modal
@@ -733,9 +784,21 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
                                                     bilaoItem['price']
                                                         ?.substring(1) ??
                                                         '0') ?? 0.0;
+                                          } else {
+                                            final dessertItem = desserts.firstWhere(
+                                                  (bilao) =>
+                                              bilao['name'] == item.key,
+                                              orElse: () => {},
+                                            );
+                                            if (dessertItem.isNotEmpty) {
+                                              price =
+                                                  double.tryParse(
+                                                      dessertItem['price']
+                                                          ?.substring(1) ??
+                                                          '0') ?? 0.0;
+                                            }
                                           }
                                         }
-
                                         return total + (price * item.value);
                                       }).toStringAsFixed(2)}',
                                       style: TextStyle(fontSize: 20),),
@@ -830,11 +893,26 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
           orElse: () => {});
       if (bilaoItem.isNotEmpty) {
         price = double.tryParse(bilaoItem['price']?.substring(1) ?? '0') ?? 0.0;
+      } else {
+        final bilaoItem = desserts.firstWhere((bilao) =>
+        bilao['name'] == itemName,
+            orElse: () => {});
+        if (bilaoItem.isNotEmpty) {
+          price =
+              double.tryParse(bilaoItem['price']?.substring(1) ?? '0') ?? 0.0;
+        } else {
+          final dessertItem = desserts.firstWhere((bilao) =>
+          bilao['name'] == itemName,
+              orElse: () => {});
+          if (dessertItem.isNotEmpty) {
+            price =
+                double.tryParse(dessertItem['price']?.substring(1) ?? '0') ?? 0.0;
+          }
+        }
       }
-    }
+  }
     return price;
   }
-
 }
 
   Widget _drawerItem(BuildContext context, String title, String route, IconData icon) {

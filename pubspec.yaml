@@ -71,6 +71,9 @@ flutter:
   - assets/images/chami_bilao.png
   - assets/images/palabok_bilao.png
   - assets/images/gcash.jpg
+  - assets/images/Graham.png
+  - assets/images/graham-bar.png
+  - assets/images/leche-flan.png
 
 
   #uses-material-design: true
