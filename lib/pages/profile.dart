@@ -1,14 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class Profile extends StatelessWidget {
+class Profile extends StatefulWidget {
   const Profile({super.key});
+
+  @override
+  State<Profile> createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
+  final TextEditingController currentPasswordController = TextEditingController();
+  final TextEditingController newPasswordController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
+
+  bool isObscureCurrent = true;
+  bool isObscureNew = true;
+  bool isObscureConfirm = true;
 
   @override
   Widget build(BuildContext context) {
     final bool isMobile = MediaQuery.of(context).size.width < 768;
 
     return Scaffold(
+      backgroundColor: const Color(0xFFE8E8E8),
       appBar: AppBar(
         backgroundColor: const Color(0xFFEFCA6C),
         elevation: 2,
@@ -29,7 +43,6 @@ class Profile extends StatelessWidget {
         ]
             : null,
       ),
-
       endDrawer: Drawer(
         backgroundColor: const Color(0xFFEFCA6C),
         width: 200,
@@ -53,6 +66,98 @@ class Profile extends StatelessWidget {
           ],
         ),
       ),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 50),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'Change Password',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 30),
+              _buildPasswordField(
+                label: 'Current Password',
+                controller: currentPasswordController,
+                obscureText: isObscureCurrent,
+                toggleVisibility: () {
+                  setState(() {
+                    isObscureCurrent = !isObscureCurrent;
+                  });
+                },
+              ),
+              const SizedBox(height: 20),
+              _buildPasswordField(
+                label: 'New Password',
+                controller: newPasswordController,
+                obscureText: isObscureNew,
+                toggleVisibility: () {
+                  setState(() {
+                    isObscureNew = !isObscureNew;
+                  });
+                },
+              ),
+              const SizedBox(height: 20),
+              _buildPasswordField(
+                label: 'Confirm Password',
+                controller: confirmPasswordController,
+                obscureText: isObscureConfirm,
+                toggleVisibility: () {
+                  setState(() {
+                    isObscureConfirm = !isObscureConfirm;
+                  });
+                },
+              ),
+              const SizedBox(height: 30),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    // TODO: Add password change logic
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFFF3C95E),
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: const Text(
+                    'Submit',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPasswordField({
+    required String label,
+    required TextEditingController controller,
+    required bool obscureText,
+    required VoidCallback toggleVisibility,
+  }) {
+    return TextField(
+      controller: controller,
+      obscureText: obscureText,
+      decoration: InputDecoration(
+        labelText: label,
+        border: const OutlineInputBorder(),
+        suffixIcon: IconButton(
+          icon: Icon(
+            obscureText ? Icons.visibility_off : Icons.visibility,
+          ),
+          onPressed: toggleVisibility,
+        ),
+      ),
     );
   }
 
@@ -60,17 +165,6 @@ class Profile extends StatelessWidget {
     return ListTile(
       leading: FaIcon(icon, color: Colors.black, size: 23,),
       title: Text(title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
-      onTap: () {
-        Navigator.pop(context);
-        Navigator.pushNamed(context, route);
-      },
-    );
-  }
-
-  Widget _iconItem(BuildContext context, String title, IconData icon, String route) {
-    return ListTile(
-      leading: Icon(icon),
-      title: Text(title, style: const TextStyle(fontSize: 16)),
       onTap: () {
         Navigator.pop(context);
         Navigator.pushNamed(context, route);
