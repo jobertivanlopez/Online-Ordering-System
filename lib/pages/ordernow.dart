@@ -254,21 +254,19 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
               ],
             ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
                 const SizedBox(height: 1),
-                Image.asset(dish['image']!, height: 90, fit: BoxFit.cover),
-                const SizedBox(height: 8),
+              Image.asset(dish['image']!, height: 90, fit: BoxFit.cover),
+              const SizedBox(height: 8),
                 Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                Text(dish['price']!,
-                    style: const TextStyle(color: Colors.black54)),
+                Text(dish['price']!, style: const TextStyle(color: Colors.black54)),
                 const SizedBox(height: 1),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
-                      icon: const FaIcon(
-                          FontAwesomeIcons.circleMinus, color: Colors.black),
+                      icon: const FaIcon(FontAwesomeIcons.circleMinus, color: Colors.black),
                       onPressed: () {
                         setState(() {
                           if (quantities[name]! > 0) {
@@ -279,8 +277,7 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
                     ),
                     Text('${quantities[name]}'),
                     IconButton(
-                      icon: const FaIcon(
-                          FontAwesomeIcons.circlePlus, color: Colors.black),
+                      icon: const FaIcon(FontAwesomeIcons.circlePlus, color: Colors.black),
                       onPressed: () {
                         setState(() {
                           quantities[name] = quantities[name]! + 1;
@@ -307,10 +304,8 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
         childAspectRatio: 0.75,
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        children: bilao.map((dish) {
-          final name = dish['name']!;
-          final price = dish['price']!;
-          final image = dish['image']!;
+        children: bilao.map((bilao) {
+          final name = bilao['name']!;
           return Container(
             decoration: BoxDecoration(
               color: Colors.white,
@@ -324,39 +319,37 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
               ],
             ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(image, height: 80, fit: BoxFit.cover),
-                const SizedBox(height: 8),
-                Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                Text(price, style: const TextStyle(color: Colors.black54)),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      icon: const FaIcon(
-                        FontAwesomeIcons.circleMinus, color: Colors.black,),
-                      onPressed: () {
-                        setState(() {
-                          if (quantities[name]! > 0) {
-                            quantities[name] = quantities[name]! - 1;
-                          }
-                        });
-                      },
-                    ),
-                    Text('${quantities[name]}'),
-                    IconButton(
-                      icon: const FaIcon(
-                        FontAwesomeIcons.circlePlus, color: Colors.black,),
-                      onPressed: () {
-                        setState(() {
-                          quantities[name] = quantities[name]! + 1;
-                        });
-                      },
-                    ),
-                  ],
-                ),
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+            Image.asset(bilao['image']!, height: 80, fit: BoxFit.cover),
+            const SizedBox(height: 8,),
+              Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
+              Text(bilao['price']!, style: const TextStyle(color: Colors.black54)),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    icon: const FaIcon(FontAwesomeIcons.circleMinus, color: Colors.black),
+                    onPressed: () {
+                      setState(() {
+                        if (quantities[name]! > 0) {
+                          quantities[name] = quantities[name]! - 1;
+                        }
+                      });
+                    },
+                  ),
+                  Text('${quantities[name]}'),
+                  IconButton(
+                    icon: const FaIcon(FontAwesomeIcons.circlePlus, color: Colors.black),
+                    onPressed: () {
+                      setState(() {
+                        quantities[name] = quantities[name]! + 1;
+                      });
+                    },
+                  ),
+                ],
+              ),
               ],
             ),
           );
@@ -391,38 +384,37 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
               ],
             ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(height: 1),
-                Image.asset(dessert['image']!, height: 90, fit: BoxFit.cover),
-                const SizedBox(height: 8),
-                Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                Text(dessert['price']!, style: const TextStyle(color: Colors.black54)),
-                const SizedBox(height: 1),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      icon: const FaIcon(FontAwesomeIcons.circleMinus, color: Colors.black),
-                      onPressed: () {
-                        setState(() {
-                          if (quantities[name]! > 0) {
-                            quantities[name] = quantities[name]! - 1;
-                          }
-                        });
-                      },
-                    ),
-                    Text('${quantities[name]}'),
-                    IconButton(
-                      icon: const FaIcon(FontAwesomeIcons.circlePlus, color: Colors.black),
-                      onPressed: () {
-                        setState(() {
-                          quantities[name] = quantities[name]! + 1;
-                        });
-                      },
-                    ),
-                  ],
-                ),
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+            Image.asset(dessert['image']!, height: 90, fit: BoxFit.cover),
+            const SizedBox(height: 8,),
+              Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
+              Text(dessert['price']!, style: const TextStyle(color: Colors.black54)),
+              const SizedBox(height: 1),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    icon: const FaIcon(FontAwesomeIcons.circleMinus, color: Colors.black),
+                    onPressed: () {
+                      setState(() {
+                        if (quantities[name]! > 0) {
+                          quantities[name] = quantities[name]! - 1;
+                        }
+                      });
+                    },
+                  ),
+                  Text('${quantities[name]}'),
+                  IconButton(
+                    icon: const FaIcon(FontAwesomeIcons.circlePlus, color: Colors.black),
+                    onPressed: () {
+                      setState(() {
+                        quantities[name] = quantities[name]! + 1;
+                      });
+                    },
+                  ),
+                ],
+              ),
               ],
             ),
           );
@@ -430,10 +422,6 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
       ),
     );
   }
-
-
-
-
 
 
 
@@ -638,37 +626,47 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
                           const SizedBox(height: 20),
                           ElevatedButton(
                             onPressed: () {
-                              // Process the order after clicking "Place Order"
-                              List<String> selectedDishes = [];  // Make sure this is explicitly a List<String>
+                              List<String> selectedItems = [];
                               double totalAmount = 0;
 
-                              // Loop through the quantities to calculate the total and selected dishes
+                              // Loop through Dishes quantities to calculate total and selected dishes
                               quantities.forEach((name, quantity) {
                                 if (quantity > 0) {
-                                  selectedDishes.add(name);  // This ensures it is a List<String>
-                                  final price = dishes.firstWhere((dish) => dish['name'] == name)['price']!;
+                                  selectedItems.add(name);  // Add dish, bilao, or dessert to selected list
+                                  String price = '';
+
+                                  // Check if the item belongs to Dishes, Bilao, or Desserts
+                                  if (dishes.any((dish) => dish['name'] == name)) {
+                                    price = dishes.firstWhere((dish) => dish['name'] == name)['price']!;
+                                  } else if (bilao.any((dish) => dish['name'] == name)) {
+                                    price = bilao.firstWhere((dish) => dish['name'] == name)['price']!;
+                                  } else if (desserts.any((dish) => dish['name'] == name)) {
+                                    price = desserts.firstWhere((dish) => dish['name'] == name)['price']!;
+                                  }
+
+                                  // Update total amount
                                   totalAmount += double.parse(price.replaceAll('₱', '').replaceAll(',', '')) * quantity;
                                 }
                               });
 
-                              // Create an order if dishes are selected
-                              if (selectedDishes.isNotEmpty) {
+                              // Create the order if items are selected
+                              if (selectedItems.isNotEmpty) {
                                 final order = Order(
-                                  orderId: DateTime.now().millisecondsSinceEpoch.toString(),
+                                  orderId: _generateOrderId(),  // Generate Order ID with leading zeros
                                   orderMethod: deliveryOption,
                                   orderPlaced: DateTime.now().toString(),
                                   amount: totalAmount,
                                   status: 'Delivered',
-                                  dishes: selectedDishes, // Now it's properly typed as List<String>
+                                  dishes: selectedItems,
                                 );
 
-                                // Close the modal first
+                                // Close the modal
                                 Navigator.pop(context);
 
-                                // Reset the cart
+                                // Reset the quantities after placing the order
                                 setState(() {
                                   quantities.forEach((key, value) {
-                                    quantities[key] = 0;  // Reset the quantities in the cart
+                                    quantities[key] = 0;  // Reset all items to 0 after placing the order
                                   });
                                 });
 
@@ -692,6 +690,7 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
                               style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
                             ),
                           ),
+
                         ],
                       ),
                     ),
@@ -704,6 +703,12 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
       },
     );
   }
+
+  String _generateOrderId() {
+    final randomNumber = DateTime.now().millisecondsSinceEpoch % 100000;  // Generate a random number with max 5 digits
+    return randomNumber.toString().padLeft(5, '0');  // Pad the number with leading zeros to ensure it's 5 digits
+  }
+
 
   void _showOrderPlacedModal(BuildContext context) {
     showDialog(
