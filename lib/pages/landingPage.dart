@@ -88,7 +88,7 @@ class Landingpage extends StatelessWidget {
                     const SizedBox(height: 32),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, '/OrderNow');
+                        Navigator.pushNamed(context, '/orderhistory');
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFFFFD766),

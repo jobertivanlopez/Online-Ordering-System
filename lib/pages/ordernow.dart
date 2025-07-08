@@ -1,8 +1,9 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'dart:io';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import '../globals.dart';
+import '../models/orderhistorymodel.dart';
 
 class Ordernow extends StatefulWidget {
   const Ordernow({super.key});
@@ -441,9 +442,7 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
     if (_hashItems()) {
       _showCheckoutModal();
     } else {
-      // Close the sidebar if it's open
       Navigator.pop(context);
-
       _showCustomSnackBar('Please add items to your order.');
     }
   }
@@ -513,13 +512,13 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
               alignment: Alignment.center,
               child: SizedBox(
                 width: 330,
-                // Set a fixed width for the modal here (adjust as needed)
                 child: Material(
                   color: Colors.white,
                   elevation: 13,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.horizontal(
-                      left: Radius.circular(10), right: Radius.circular(10),),
+                      left: Radius.circular(10), right: Radius.circular(10),
+                    ),
                   ),
                   child: SafeArea(
                     child: Padding(
@@ -529,8 +528,7 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 70, vertical: 13),
+                            padding: EdgeInsets.symmetric(horizontal: 70, vertical: 13),
                             margin: EdgeInsets.only(bottom: 24),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(30),
@@ -539,8 +537,7 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
                             ),
                             child: const Text(
                               'Delivery',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 15),
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                             ),
                           ),
                           // Full Name
@@ -586,12 +583,11 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
                             ),
                           ),
                           const SizedBox(height: 16),
+                          // Payment method selection
                           Text(
                             'Scan GCASH QR Code',
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                           ),
-
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
@@ -601,21 +597,18 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
                                   children: [
                                     const SizedBox(height: 10),
                                     Padding(
-                                      padding: const EdgeInsets.only(right: 10.0), // Adjust padding here
+                                      padding: const EdgeInsets.only(right: 10.0),
                                       child: Image.asset(
                                         'assets/images/gcash.jpg',
-                                        width: 120, // Reduce the size of the QR code image if needed
+                                        width: 120,
                                         height: 120,
                                       ),
                                     ),
                                     const SizedBox(height: 10),
                                   ],
                                 ),
-
-                              // Add space between the QR and the button with Flexible
                               const SizedBox(width: 10),
-
-                              Flexible( // Ensure the button and uploaded image take up remaining space
+                              Flexible(
                                 child: Column(
                                   children: [
                                     ElevatedButton(
@@ -626,9 +619,8 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: const Color(0xFFEFCA6C),
                                       ),
-                                      child: const Text('Upload Payment', style: TextStyle(fontSize: 12.5, color: Colors.black),),
+                                      child: const Text('Upload Payment', style: TextStyle(fontSize: 12.5, color: Colors.black)),
                                     ),
-
                                     const SizedBox(height: 10),
                                     // Display the selected image
                                     if (_image != null)
@@ -643,26 +635,61 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
                               ),
                             ],
                           ),
-
                           const SizedBox(height: 20),
                           ElevatedButton(
                             onPressed: () {
-                              Navigator.pop(context); // Close modal
+                              // Process the order after clicking "Place Order"
+                              List<String> selectedDishes = [];  // Make sure this is explicitly a List<String>
+                              double totalAmount = 0;
+
+                              // Loop through the quantities to calculate the total and selected dishes
+                              quantities.forEach((name, quantity) {
+                                if (quantity > 0) {
+                                  selectedDishes.add(name);  // This ensures it is a List<String>
+                                  final price = dishes.firstWhere((dish) => dish['name'] == name)['price']!;
+                                  totalAmount += double.parse(price.replaceAll('₱', '').replaceAll(',', '')) * quantity;
+                                }
+                              });
+
+                              // Create an order if dishes are selected
+                              if (selectedDishes.isNotEmpty) {
+                                final order = Order(
+                                  orderId: DateTime.now().millisecondsSinceEpoch.toString(),
+                                  orderMethod: deliveryOption,
+                                  orderPlaced: DateTime.now().toString(),
+                                  amount: totalAmount,
+                                  status: 'Delivered',
+                                  dishes: selectedDishes, // Now it's properly typed as List<String>
+                                );
+
+                                // Close the modal first
+                                Navigator.pop(context);
+
+                                // Reset the cart
+                                setState(() {
+                                  quantities.forEach((key, value) {
+                                    quantities[key] = 0;  // Reset the quantities in the cart
+                                  });
+                                });
+
+                                // Add the order to the global orderHistory list
+                                orderHistory.add(order);
+
+                                // Show "Order Placed" confirmation modal
+                                _showOrderPlacedModal(context);
+                              } else {
+                                // Show a message if no items are selected
+                                _showCustomSnackBar('Please add items to your order.');
+                              }
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Color(0xFFEFCA6C),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                               minimumSize: Size(500, 40),
                             ),
                             child: const Text(
                               'Place Order',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18
-                              ),
+                              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
                             ),
                           ),
                         ],
@@ -677,6 +704,27 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
       },
     );
   }
+
+  void _showOrderPlacedModal(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Icon(Icons.check_circle, color: Colors.green, size: 60),
+          content: Text('Order placed successfully!'),
+          actions: <Widget>[
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context); // Close the confirmation modal
+              },
+              child: const Text('Ok'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 
 
   void _showSummarySidebar(BuildContext context) {

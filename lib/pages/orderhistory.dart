@@ -1,120 +1,51 @@
 import 'package:flutter/material.dart';
+import '../models/orderhistorymodel.dart';
 
-class Orderhistory extends StatelessWidget {
-  const Orderhistory({super.key});
 
+
+class OrderHistory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final bool isMobile = MediaQuery.of(context).size.width < 768;
+    // Retrieve the order from the arguments
+    final Order order = ModalRoute.of(context)?.settings.arguments as Order;
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFFEFCA6C),
-        elevation: 2,
-        automaticallyImplyLeading: false,
-        title: Row(
-          children: [
-            Image.asset('assets/images/logo.jpg', height: 50),
-          ],
-        ),
-        actions: isMobile
-            ? [
-          Builder(
-            builder: (context) => IconButton(
-              icon: const Icon(Icons.menu, color: Colors.black),
-              onPressed: () => Scaffold.of(context).openEndDrawer(),
-            ),
-          ),
-        ]
-            : null,
+        title: Text('Order History'),
       ),
-
-      endDrawer: Drawer(
-        backgroundColor: const Color(0xFFEFCA6C),
-        width: 200,
-        child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          children: [
-            const SizedBox(height: 85),
-            _drawerItem(context, 'Home', '/landingpage'),
-            _drawerItem(context, 'Order Now', '/ordernow'),
-            _drawerItem(context, 'Contact Us', '/contactus'),
-            _iconItem(context, 'Notifications', Icons.notifications, '/notifications'),
-            _iconItem(context, 'Account', Icons.account_circle, '/profile'),
-            ListTile(
-              leading: const Icon(Icons.logout),
-              title: const Text('Logout'),
-              onTap: () {
-                Navigator.pop(context);
-                _showLogoutModal(context);
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _drawerItem(BuildContext context, String title, String route) {
-    return ListTile(
-      title: Text(title, style: const TextStyle(fontSize: 16)),
-      onTap: () {
-        Navigator.pop(context);
-        Navigator.pushNamed(context, route);
-      },
-    );
-  }
-
-  Widget _iconItem(BuildContext context, String title, IconData icon, String route) {
-    return ListTile(
-      leading: Icon(icon),
-      title: Text(title, style: const TextStyle(fontSize: 16)),
-      onTap: () {
-        Navigator.pop(context);
-        Navigator.pushNamed(context, route);
-      },
-    );
-  }
-
-  void _showLogoutModal(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: const Color(0xFFEFCA6C),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
-      ),
-      builder: (_) => Padding(
-        padding: const EdgeInsets.all(24),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Are you sure you want to log out?',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
+            Text('Order ID: ${order.orderId}', style: TextStyle(fontSize: 20)),
+            Text('Order Method: ${order.orderMethod}', style: TextStyle(fontSize: 18)),
+            Text('Order Placed: ${order.orderPlaced}', style: TextStyle(fontSize: 18)),
+            Text('Amount: ₱${order.amount.toStringAsFixed(2)}', style: TextStyle(fontSize: 18)),
+            Text('Status: ${order.status}', style: TextStyle(fontSize: 18, color: Colors.green)),
             const SizedBox(height: 20),
+            Text('Ordered Items:', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            ...order.dishes.map((dish) {
+              return Text(dish, style: TextStyle(fontSize: 16));
+            }).toList(),
+            
             ElevatedButton(
-              onPressed: () => Navigator.pushReplacementNamed(context, '/login'),
+                onPressed: (){
+                  Navigator.pushNamed(context, '/OrderNow');
+                },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
+                backgroundColor: const Color(0xFFFFD766),
                 foregroundColor: Colors.black,
+                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
-                  side: const BorderSide(color: Colors.black),
                 ),
-                minimumSize: const Size.fromHeight(50),
               ),
-              child: const Text('Logout'),
-            ),
-            const SizedBox(height: 10),
-            OutlinedButton(
-              onPressed: () => Navigator.pop(context),
-              style: OutlinedButton.styleFrom(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                minimumSize: const Size.fromHeight(50),
+              child: const Text(
+                'Order Now',
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              child: const Text('Cancel'),
-            ),
+            )
           ],
         ),
       ),

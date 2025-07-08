@@ -4,6 +4,7 @@ import 'pages/landingPage.dart';
 import 'pages/ordernow.dart';
 import 'pages/contactus.dart';
 import 'pages/notifications.dart';
+import 'pages/orderhistory.dart';
 
 
 void main() {
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
         '/OrderNow': (context)   => const Ordernow(),
         '/notifications': (context) => const Notifications(),
         '/profile': (context) => const Profile(),
+        '/orderhistory': (context) => OrderHistory(),
       },
     );
   }

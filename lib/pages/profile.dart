@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../globals.dart';
+import '../models/orderhistorymodel.dart';
+
 
 class Profile extends StatelessWidget {
   const Profile({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final bool isMobile = MediaQuery.of(context).size.width < 768;
+    final List<Order> orders = orderHistory;
 
     return Scaffold(
+      backgroundColor: Color(0xFFF5F5F5),
       appBar: AppBar(
         backgroundColor: const Color(0xFFEFCA6C),
         elevation: 2,
@@ -18,105 +21,58 @@ class Profile extends StatelessWidget {
             Image.asset('assets/images/logo.jpg', height: 50),
           ],
         ),
-        actions: isMobile
-            ? [
-          Builder(
-            builder: (context) => IconButton(
-              icon: const Icon(Icons.menu, color: Colors.black),
-              onPressed: () => Scaffold.of(context).openEndDrawer(),
-            ),
-          ),
-        ]
-            : null,
       ),
-
-      endDrawer: Drawer(
-        backgroundColor: const Color(0xFFEFCA6C),
-        width: 200,
-        child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          children: [
-            const SizedBox(height: 85),
-            _drawerItem(context, 'Home', '/landingpage', FontAwesomeIcons.home),
-            _drawerItem(context, 'Order Now', '/OrderNow', FontAwesomeIcons.cartPlus),
-            _drawerItem(context, 'Contact Us', '/contactus', FontAwesomeIcons.phone),
-            _drawerItem(context, 'Notifications', '/notifications', FontAwesomeIcons.bell),
-            _drawerItem(context, 'Account', '/profile', FontAwesomeIcons.user),
-            ListTile(
-              leading: const Icon(FontAwesomeIcons.signOut, color: Colors.black,),
-              title: const Text('Logout', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),),
-              onTap: () {
-                Navigator.pop(context);
-                _showLogoutModal(context);
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _drawerItem(BuildContext context, String title, String route, IconData icon) {
-    return ListTile(
-      leading: FaIcon(icon, color: Colors.black, size: 23,),
-      title: Text(title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
-      onTap: () {
-        Navigator.pop(context);
-        Navigator.pushNamed(context, route);
-      },
-    );
-  }
-
-  Widget _iconItem(BuildContext context, String title, IconData icon, String route) {
-    return ListTile(
-      leading: Icon(icon),
-      title: Text(title, style: const TextStyle(fontSize: 16)),
-      onTap: () {
-        Navigator.pop(context);
-        Navigator.pushNamed(context, route);
-      },
-    );
-  }
-
-  void _showLogoutModal(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: const Color(0xFFEFCA6C),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
-      ),
-      builder: (_) => Padding(
-        padding: const EdgeInsets.all(24),
+      body: SingleChildScrollView(
         child: Column(
-          mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
-              'Are you sure you want to log out?',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => Navigator.pushReplacementNamed(context, '/login'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                foregroundColor: Colors.black,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                  side: const BorderSide(color: Colors.black),
+            // Display Order History
+            if (orders.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Order History',
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 10),
+                    // Display each order in a ListTile
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: orders.length,
+                      itemBuilder: (context, index) {
+                        final order = orders[index];
+                        return Card(
+                          margin: EdgeInsets.symmetric(vertical: 13),
+                          child: ListTile(
+                            title: Text('Order ID: ${order.orderId}'),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Method: ${order.orderMethod}'),
+                                Text('Amount: ₱${order.amount.toStringAsFixed(2)}'),
+                                Text('Status: ${order.status}'),
+                                Text('Placed: ${order.orderPlaced}'),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
-                minimumSize: const Size.fromHeight(50),
+              )
+            else
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  'No orders found.',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
               ),
-              child: const Text('Logout'),
-            ),
-            const SizedBox(height: 10),
-            OutlinedButton(
-              onPressed: () => Navigator.pop(context),
-              style: OutlinedButton.styleFrom(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                minimumSize: const Size.fromHeight(50),
-              ),
-              child: const Text('Cancel'),
-            ),
           ],
         ),
       ),
