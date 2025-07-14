@@ -40,7 +40,6 @@ class Landingpage extends StatelessWidget {
             const SizedBox(height: 85),
             _drawerItem(context, 'Home', '/landingpage', FontAwesomeIcons.house),
             _drawerItem(context, 'Order Now', '/OrderNow', FontAwesomeIcons.cartPlus),
-            _drawerItem(context, 'Contact Us', '/contactus', FontAwesomeIcons.phone),
             _drawerItem(context, 'Notifications', '/notifications', FontAwesomeIcons.bell),
             _drawerItem(context, 'Account', '/profile', FontAwesomeIcons.user),
             ListTile(
