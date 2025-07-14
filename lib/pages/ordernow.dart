@@ -1,8 +1,9 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'dart:io';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import '../globals.dart';
+import '../models/orderhistorymodel.dart';
 
 class Ordernow extends StatefulWidget {
   const Ordernow({super.key});
@@ -253,21 +254,19 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
               ],
             ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
                 const SizedBox(height: 1),
-                Image.asset(dish['image']!, height: 90, fit: BoxFit.cover),
-                const SizedBox(height: 8),
+              Image.asset(dish['image']!, height: 90, fit: BoxFit.cover),
+              const SizedBox(height: 8),
                 Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                Text(dish['price']!,
-                    style: const TextStyle(color: Colors.black54)),
+                Text(dish['price']!, style: const TextStyle(color: Colors.black54)),
                 const SizedBox(height: 1),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
-                      icon: const FaIcon(
-                          FontAwesomeIcons.circleMinus, color: Colors.black),
+                      icon: const FaIcon(FontAwesomeIcons.circleMinus, color: Colors.black),
                       onPressed: () {
                         setState(() {
                           if (quantities[name]! > 0) {
@@ -278,8 +277,7 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
                     ),
                     Text('${quantities[name]}'),
                     IconButton(
-                      icon: const FaIcon(
-                          FontAwesomeIcons.circlePlus, color: Colors.black),
+                      icon: const FaIcon(FontAwesomeIcons.circlePlus, color: Colors.black),
                       onPressed: () {
                         setState(() {
                           quantities[name] = quantities[name]! + 1;
@@ -306,10 +304,8 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
         childAspectRatio: 0.75,
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        children: bilao.map((dish) {
-          final name = dish['name']!;
-          final price = dish['price']!;
-          final image = dish['image']!;
+        children: bilao.map((bilao) {
+          final name = bilao['name']!;
           return Container(
             decoration: BoxDecoration(
               color: Colors.white,
@@ -323,39 +319,37 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
               ],
             ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(image, height: 80, fit: BoxFit.cover),
-                const SizedBox(height: 8),
-                Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                Text(price, style: const TextStyle(color: Colors.black54)),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      icon: const FaIcon(
-                        FontAwesomeIcons.circleMinus, color: Colors.black,),
-                      onPressed: () {
-                        setState(() {
-                          if (quantities[name]! > 0) {
-                            quantities[name] = quantities[name]! - 1;
-                          }
-                        });
-                      },
-                    ),
-                    Text('${quantities[name]}'),
-                    IconButton(
-                      icon: const FaIcon(
-                        FontAwesomeIcons.circlePlus, color: Colors.black,),
-                      onPressed: () {
-                        setState(() {
-                          quantities[name] = quantities[name]! + 1;
-                        });
-                      },
-                    ),
-                  ],
-                ),
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+            Image.asset(bilao['image']!, height: 80, fit: BoxFit.cover),
+            const SizedBox(height: 8,),
+              Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
+              Text(bilao['price']!, style: const TextStyle(color: Colors.black54)),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    icon: const FaIcon(FontAwesomeIcons.circleMinus, color: Colors.black),
+                    onPressed: () {
+                      setState(() {
+                        if (quantities[name]! > 0) {
+                          quantities[name] = quantities[name]! - 1;
+                        }
+                      });
+                    },
+                  ),
+                  Text('${quantities[name]}'),
+                  IconButton(
+                    icon: const FaIcon(FontAwesomeIcons.circlePlus, color: Colors.black),
+                    onPressed: () {
+                      setState(() {
+                        quantities[name] = quantities[name]! + 1;
+                      });
+                    },
+                  ),
+                ],
+              ),
               ],
             ),
           );
@@ -390,38 +384,37 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
               ],
             ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(height: 1),
-                Image.asset(dessert['image']!, height: 90, fit: BoxFit.cover),
-                const SizedBox(height: 8),
-                Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                Text(dessert['price']!, style: const TextStyle(color: Colors.black54)),
-                const SizedBox(height: 1),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      icon: const FaIcon(FontAwesomeIcons.circleMinus, color: Colors.black),
-                      onPressed: () {
-                        setState(() {
-                          if (quantities[name]! > 0) {
-                            quantities[name] = quantities[name]! - 1;
-                          }
-                        });
-                      },
-                    ),
-                    Text('${quantities[name]}'),
-                    IconButton(
-                      icon: const FaIcon(FontAwesomeIcons.circlePlus, color: Colors.black),
-                      onPressed: () {
-                        setState(() {
-                          quantities[name] = quantities[name]! + 1;
-                        });
-                      },
-                    ),
-                  ],
-                ),
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+            Image.asset(dessert['image']!, height: 90, fit: BoxFit.cover),
+            const SizedBox(height: 8,),
+              Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
+              Text(dessert['price']!, style: const TextStyle(color: Colors.black54)),
+              const SizedBox(height: 1),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    icon: const FaIcon(FontAwesomeIcons.circleMinus, color: Colors.black),
+                    onPressed: () {
+                      setState(() {
+                        if (quantities[name]! > 0) {
+                          quantities[name] = quantities[name]! - 1;
+                        }
+                      });
+                    },
+                  ),
+                  Text('${quantities[name]}'),
+                  IconButton(
+                    icon: const FaIcon(FontAwesomeIcons.circlePlus, color: Colors.black),
+                    onPressed: () {
+                      setState(() {
+                        quantities[name] = quantities[name]! + 1;
+                      });
+                    },
+                  ),
+                ],
+              ),
               ],
             ),
           );
@@ -432,18 +425,12 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
 
 
 
-
-
-
-
   //Checkout modal
   void _checkout() {
     if (_hashItems()) {
       _showCheckoutModal();
     } else {
-      // Close the sidebar if it's open
       Navigator.pop(context);
-
       _showCustomSnackBar('Please add items to your order.');
     }
   }
@@ -513,13 +500,13 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
               alignment: Alignment.center,
               child: SizedBox(
                 width: 330,
-                // Set a fixed width for the modal here (adjust as needed)
                 child: Material(
                   color: Colors.white,
                   elevation: 13,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.horizontal(
-                      left: Radius.circular(10), right: Radius.circular(10),),
+                      left: Radius.circular(10), right: Radius.circular(10),
+                    ),
                   ),
                   child: SafeArea(
                     child: Padding(
@@ -529,8 +516,7 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 70, vertical: 13),
+                            padding: EdgeInsets.symmetric(horizontal: 70, vertical: 13),
                             margin: EdgeInsets.only(bottom: 24),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(30),
@@ -539,8 +525,7 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
                             ),
                             child: const Text(
                               'Delivery',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 15),
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                             ),
                           ),
                           // Full Name
@@ -586,12 +571,11 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
                             ),
                           ),
                           const SizedBox(height: 16),
+                          // Payment method selection
                           Text(
                             'Scan GCASH QR Code',
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                           ),
-
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
@@ -601,21 +585,18 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
                                   children: [
                                     const SizedBox(height: 10),
                                     Padding(
-                                      padding: const EdgeInsets.only(right: 10.0), // Adjust padding here
+                                      padding: const EdgeInsets.only(right: 10.0),
                                       child: Image.asset(
                                         'assets/images/gcash.jpg',
-                                        width: 120, // Reduce the size of the QR code image if needed
+                                        width: 120,
                                         height: 120,
                                       ),
                                     ),
                                     const SizedBox(height: 10),
                                   ],
                                 ),
-
-                              // Add space between the QR and the button with Flexible
                               const SizedBox(width: 10),
-
-                              Flexible( // Ensure the button and uploaded image take up remaining space
+                              Flexible(
                                 child: Column(
                                   children: [
                                     ElevatedButton(
@@ -626,9 +607,8 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: const Color(0xFFEFCA6C),
                                       ),
-                                      child: const Text('Upload Payment', style: TextStyle(fontSize: 12.5, color: Colors.black),),
+                                      child: const Text('Upload Payment', style: TextStyle(fontSize: 12.5, color: Colors.black)),
                                     ),
-
                                     const SizedBox(height: 10),
                                     // Display the selected image
                                     if (_image != null)
@@ -643,28 +623,74 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
                               ),
                             ],
                           ),
-
                           const SizedBox(height: 20),
                           ElevatedButton(
                             onPressed: () {
-                              Navigator.pop(context); // Close modal
+                              List<String> selectedItems = [];
+                              double totalAmount = 0;
+
+                              // Loop through Dishes quantities to calculate total and selected dishes
+                              quantities.forEach((name, quantity) {
+                                if (quantity > 0) {
+                                  selectedItems.add(name);  // Add dish, bilao, or dessert to selected list
+                                  String price = '';
+
+                                  // Check if the item belongs to Dishes, Bilao, or Desserts
+                                  if (dishes.any((dish) => dish['name'] == name)) {
+                                    price = dishes.firstWhere((dish) => dish['name'] == name)['price']!;
+                                  } else if (bilao.any((dish) => dish['name'] == name)) {
+                                    price = bilao.firstWhere((dish) => dish['name'] == name)['price']!;
+                                  } else if (desserts.any((dish) => dish['name'] == name)) {
+                                    price = desserts.firstWhere((dish) => dish['name'] == name)['price']!;
+                                  }
+
+                                  // Update total amount
+                                  totalAmount += double.parse(price.replaceAll('₱', '').replaceAll(',', '')) * quantity;
+                                }
+                              });
+
+                              // Create the order if items are selected
+                              if (selectedItems.isNotEmpty) {
+                                final order = Order(
+                                  orderId: _generateOrderId(),  // Generate Order ID with leading zeros
+                                  orderMethod: deliveryOption,
+                                  orderPlaced: DateTime.now().toString(),
+                                  amount: totalAmount,
+                                  status: 'Delivered',
+                                  dishes: selectedItems,
+                                );
+
+                                // Close the modal
+                                Navigator.pop(context);
+
+                                // Reset the quantities after placing the order
+                                setState(() {
+                                  quantities.forEach((key, value) {
+                                    quantities[key] = 0;  // Reset all items to 0 after placing the order
+                                  });
+                                });
+
+                                // Add the order to the global orderHistory list
+                                orderHistory.add(order);
+
+                                // Show "Order Placed" confirmation modal
+                                _showOrderPlacedModal(context);
+                              } else {
+                                // Show a message if no items are selected
+                                _showCustomSnackBar('Please add items to your order.');
+                              }
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Color(0xFFEFCA6C),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                               minimumSize: Size(500, 40),
                             ),
                             child: const Text(
                               'Place Order',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18
-                              ),
+                              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
                             ),
                           ),
+
                         ],
                       ),
                     ),
@@ -677,6 +703,33 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
       },
     );
   }
+
+  String _generateOrderId() {
+    final randomNumber = DateTime.now().millisecondsSinceEpoch % 100000;  // Generate a random number with max 5 digits
+    return randomNumber.toString().padLeft(5, '0');  // Pad the number with leading zeros to ensure it's 5 digits
+  }
+
+
+  void _showOrderPlacedModal(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Icon(Icons.check_circle, color: Colors.green, size: 60),
+          content: Text('Order placed successfully!'),
+          actions: <Widget>[
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context); // Close the confirmation modal
+              },
+              child: const Text('Ok'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 
 
   void _showSummarySidebar(BuildContext context) {
