@@ -10,6 +10,7 @@ class Landingpage extends StatelessWidget {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      backgroundColor: const Color(0xFFFFF7D6),
       appBar: AppBar(
         backgroundColor: const Color(0xFFEFCA6C),
         elevation: 2,
@@ -54,75 +55,134 @@ class Landingpage extends StatelessWidget {
         ),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(  // Make the entire body scrollable
+        child: SingleChildScrollView(
           child: Column(
             children: [
-              // Hero Section with food cards
+              // Hero Section with text and water curvy background behind it
+              Stack(
+                children: [
+                  ClipPath(
+                    clipper: Wave(),
+                    child: Container(
+                      height: 320, // Adjust height for the curvy background
+                      color: Color(0xFFFFFFFF), // Water color with some transparency
+                    ),
+                  ),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 40.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'Satisfy your cravings',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontStyle: FontStyle.italic,
+                            color: Colors.redAccent,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        const Text(
+                          'Feel the warmth.\nTaste the flavor.\nLomi at your doorstep.',
+                          style: TextStyle(
+                            fontSize: 26,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                            height: 1.4,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 32),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/OrderNow');
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFFFD766),
+                            foregroundColor: Colors.black,
+                            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                          ),
+                          child: const Text(
+                            'Order Now',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        const SizedBox(height: 70),
+                        SizedBox(
+                          height: 320,
+                          child: PageView(
+                            controller: PageController(viewportFraction: 0.75),
+                            children: [
+                              _buildPageCard(
+                                'assets/images/maja.jpg',
+                                'Maja Blanca is a creamy Filipino dessert made from coconut milk, cornstarch, and sweet corn.',
+                              ),
+                              _buildPageCard(
+                                'assets/images/lomi.jpg',
+                                'Lomi is a thick, savory noodle soup made with egg noodles, rich broth, and hearty toppings.',
+                              ),
+                              _buildPageCard(
+                                'assets/images/chami.jpg',
+                                'Chami Lomi is a thick noodle dish made with sautéed egg noodles, rich sauce, and savory toppings.',
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+
+              SizedBox(height: 20,),
+
+              //You Might Like
               Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 40.0),
-                color: Color(0xFFF1F9F5),
+                padding: const EdgeInsets.all(24.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const Text(
-                      'Satisfy your cravings',
+                      "THIS IS WHAT WE DO",
                       style: TextStyle(
-                        fontSize: 18,
-                        fontStyle: FontStyle.italic,
-                        color: Colors.redAccent,
-                        fontWeight: FontWeight.w500,
+                        fontSize: 14,
+                        letterSpacing: 1.5,
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 5),
                     const Text(
-                      'Feel the warmth.\nTaste the flavor.\nLomi at your doorstep.',
+                      "OUR SERVICES",
                       style: TextStyle(
-                        fontSize: 26,
+                        fontSize: 28,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                        height: 1.4,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 32),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/OrderNow');
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFFFD766),
-                        foregroundColor: Colors.black,
-                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
-                      child: const Text(
-                        'Order Now',
-                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
-                    const SizedBox(height: 40),
-                    SizedBox(
-                      height: 320,
-                      child: PageView(
-                        controller: PageController(viewportFraction: 0.75),
-                        children: [
-                          _buildPageCard(
-                            'assets/images/maja.jpg',
-                            'Maja Blanca is a creamy Filipino dessert made from coconut milk, cornstarch, and sweet corn.',
-                          ),
-                          _buildPageCard(
-                            'assets/images/lomi.jpg',
-                            'Lomi is a thick, savory noodle soup made with egg noodles, rich broth, and hearty toppings.',
-                          ),
-                          _buildPageCard(
-                            'assets/images/chami.jpg',
-                            'Chami Lomi is a thick noodle dish made with sautéed egg noodles, rich sauce, and savory toppings.',
-                          ),
-                        ],
-                      ),
+                    const SizedBox(height: 20),
+
+                    const ServiceCard(
+                      icon: FontAwesomeIcons.shippingFast,
+                      title: "Delivery",
+                      description:
+                      "Our delivery service offers a convenient way to receive your items directly at your doorstep. We ensure fast, reliable, and contactless delivery within the designated service area. Simply place your order online or by phone, and we’ll handle the rest.",
+                    ),
+                    const SizedBox(height: 20),
+                    const ServiceCard(
+                      icon: FontAwesomeIcons.shoppingBag,
+                      title: "Pickup",
+                      description:
+                      "With our pickup service, you can place your order in advance and pickup at your convenience. This option is perfect for those who prefer to save time and avoid waiting in lines. Just choose your pickup time, and your order will be ready when you arrive.",
+                    ),
+                    const SizedBox(height: 20),
+                    const ServiceCard(
+                      icon: FontAwesomeIcons.calendarAlt,
+                      title: "Reservation",
+                      description:
+                      "Our reservation service allows you to secure a spot in advance. Make your reservation online, and enjoy priority access and guaranteed availability without the hassle.",
                     ),
                   ],
                 ),
@@ -130,9 +190,57 @@ class Landingpage extends StatelessWidget {
 
               SizedBox(height: 20,),
 
+              Container(
+                padding: const EdgeInsets.all(30),
+                decoration: BoxDecoration(
+                  color: Color(0xFFFFFFFF),
+                ),
+                child: Column(
+                  children: [
+                    const Text(
+                      'Our Best Selling',
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Wrap(
+                      spacing: 20,
+                      runSpacing: 20,
+                      children: const [
+                        BestSellingCard(
+                          title: 'Best Selling Dishes',
+                          itemName: 'Lomi',
+                          image: 'assets/images/lomi.jpg',
+                          bgColor: Color(0xFFCFF4F0),
+                        ),
+                        BestSellingCard(
+                          title: 'Best Selling Bilao',
+                          itemName: 'Palabok',
+                          image: 'assets/images/palabok_bilao.png',
+                          bgColor: Color(0xFFF8D1DC),
+                        ),
+                        BestSellingCard(
+                          title: 'Best Selling Desserts',
+                          itemName: 'Leche Flan',
+                          image: 'assets/images/leche-flan.png',
+                          bgColor: Color(0xFFCFF3FC),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+
+
               // "You Might Also Like" Section
               Container(
                 padding: const EdgeInsets.all(16.0),
+                height: 310,
+                decoration: BoxDecoration(
+                  color: Color(0xFFFFFFFF),
+                ),
                 child: Column(
                   children: [
                     Text(
@@ -156,7 +264,6 @@ class Landingpage extends StatelessWidget {
                 ),
               ),
 
-              SizedBox(height: 30,),
 
               // Footer Section
               Container(
@@ -248,7 +355,7 @@ class Landingpage extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
-        elevation: 5,
+        elevation: 2,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -308,6 +415,151 @@ class Landingpage extends StatelessWidget {
   }
 }
 
+
+// ServiceCard Widget
+class ServiceCard extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String description;
+
+  const ServiceCard({
+    super.key,
+    required this.icon,
+    required this.title,
+    required this.description,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(100), topRight: Radius.circular(100), bottomLeft:
+        Radius.circular(20), bottomRight: Radius.circular(20)),
+        color: const Color(0xFFE7E9D1),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Container(
+            height: 100,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(80)),
+            ),
+            alignment: Alignment.center,
+            child: Icon(icon, size: 48, color: Colors.brown),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  description,
+                  textAlign: TextAlign.justify,
+                  style: const TextStyle(fontSize: 14),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class BestSellingCard extends StatelessWidget {
+  final String title;
+  final String itemName;
+  final String image;
+  final Color bgColor;
+
+  const BestSellingCard({
+    super.key,
+    required this.title,
+    required this.itemName,
+    required this.image,
+    required this.bgColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 300,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // Text content
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontStyle: FontStyle.italic,
+                  color: Colors.deepOrange,
+                ),
+              ),
+              Text(
+                itemName,
+                style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Text(
+                    'Order Now',
+                    style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      fontSize: 14,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  const Icon(FontAwesomeIcons.arrowRight, size: 15),
+                ],
+              ),
+            ],
+          ),
+          // Image
+          ClipRRect(
+            borderRadius: BorderRadius.circular(50),
+            child: Image.asset(
+              image,
+              width: 70,
+              height: 70,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 // FoodItem Widget
 class FoodItem extends StatelessWidget {
   final String image;
@@ -336,5 +588,45 @@ class FoodItem extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+
+class Wave extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    var path = Path();
+
+    // Start at the bottom left of the canvas
+    path.lineTo(0, size.height);
+
+    // First wave curve upwards
+    var point1 = Offset(size.width * 0.25, size.height * 0.4);
+    var point2 = Offset(size.width * 0.4, size.height * 0.45);
+
+    path.quadraticBezierTo(point1.dx, point1.dy, point2.dx, point2.dy);
+
+    // Second wave curve upwards
+    var point3 = Offset(size.width * 0.5, size.height * 0.4);
+    var point4 = Offset(size.width * 0.68, size.height * 0.54);
+
+    path.quadraticBezierTo(point3.dx, point3.dy, point4.dx, point4.dy);
+
+    // Third wave curve upwards
+    var point5 = Offset(size.width * 0.85, size.height * 0.6);
+    var point6 = Offset(size.width, size.height * 0.1);
+
+    path.quadraticBezierTo(point5.dx, point5.dy, point6.dx, point6.dy);
+
+    // Connect back to the top right
+    path.lineTo(size.width, 0);
+    path.close();
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) {
+    return false;
   }
 }
