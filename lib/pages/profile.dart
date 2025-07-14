@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:online_ordering_system/pages/password.dart';
 import '../globals.dart';
 import '../models/orderhistorymodel.dart';
 import 'order_history.dart';
+import 'orders.dart';
+
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -119,8 +122,8 @@ class _ProfileState extends State<Profile> {
               },
               children: [
                 _buildProfileSection(),
-                const Center(child: Text('Password Section')),
-                const Center(child: Text('Orders Section')),
+                const ChangePassword(),
+                const Orders(),
                 orders.isNotEmpty ? OrderHistory(orders: orders) : const Center(child: Text('No orders found.')),
               ],
             ),
