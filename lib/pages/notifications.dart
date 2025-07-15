@@ -9,8 +9,7 @@ class Notifications extends StatefulWidget {
 }
 
 class _NotificationsState extends State<Notifications> {
-  // Placeholder for notifications structure (even if empty)
-  List<Map<String, dynamic>> _notifications = [];
+  final List<Map<String, dynamic>> _notifications = [];
 
   void _markAllAsRead() {
     setState(() {
@@ -44,7 +43,7 @@ class _NotificationsState extends State<Notifications> {
             ? [
           Builder(
             builder: (context) => IconButton(
-              icon: const Icon(Icons.menu, color: Colors.black),
+              icon: const Icon(FontAwesomeIcons.bars, color: Colors.black),
               onPressed: () => Scaffold.of(context).openEndDrawer(),
             ),
           ),
@@ -60,7 +59,6 @@ class _NotificationsState extends State<Notifications> {
             const SizedBox(height: 85),
             _drawerItem(context, 'Home', '/landingpage', FontAwesomeIcons.house),
             _drawerItem(context, 'Order Now', '/OrderNow', FontAwesomeIcons.cartPlus),
-            _drawerItem(context, 'Contact Us', '/contactus', FontAwesomeIcons.phone),
             _drawerItem(context, 'Notifications', '/notifications', FontAwesomeIcons.bell),
             _drawerItem(context, 'Account', '/profile', FontAwesomeIcons.user),
             ListTile(

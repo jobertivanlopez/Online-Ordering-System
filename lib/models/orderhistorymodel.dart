@@ -3,7 +3,7 @@ class Order {
   final String orderMethod;
   final String orderPlaced;
   final double amount;
-  final String status;
+  late final String status;
   final List<String> dishes;
 
   Order({
