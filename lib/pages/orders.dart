@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../globals.dart';  // Import the global list of orders
+import '../globals.dart';
 
 class Orders extends StatelessWidget {
   const Orders({super.key});
@@ -23,7 +23,7 @@ class Orders extends StatelessWidget {
                 ? ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: orders.length,  // Use the global orders list
+              itemCount: orders.length,
               itemBuilder: (context, index) {
                 final order = orders[index];
                 return _buildOrderCard(
@@ -169,7 +169,7 @@ class Orders extends StatelessWidget {
     );
   }
 
-  // Order Detail Navigation (Just a placeholder method for now)
+  // Order Detail Navigation
   void _showOrderDetails(BuildContext context, String orderId) {
     Navigator.push(
       context,
@@ -180,7 +180,7 @@ class Orders extends StatelessWidget {
   }
 }
 
-// Order Detail Page (Just a simple placeholder)
+// Order Detail Page
 class OrderDetailPage extends StatelessWidget {
   final String orderId;
 
@@ -197,7 +197,6 @@ class OrderDetailPage extends StatelessWidget {
         child: Column(
           children: [
             Text('Details for Order ID: $orderId'),
-            // You can add more details of the order here
           ],
         ),
       ),
