@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import '../globals.dart';
 import '../models/orderhistorymodel.dart';
+import 'order_history.dart';
 
 class Ordernow extends StatefulWidget {
   const Ordernow({super.key});
@@ -113,7 +114,7 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
     final bool isMobile = MediaQuery.of(context).size.width < 768;
 
     return Scaffold(
-      // backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFFFF7D6),
       appBar: AppBar(
         backgroundColor: const Color(0xFFEFCA6C),
         elevation: 2,
@@ -142,11 +143,13 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
           padding: const EdgeInsets.symmetric(horizontal: 12),
           children: [
             const SizedBox(height: 85),
-            _drawerItem(context, 'Home', '/landingpage', FontAwesomeIcons.house),
-            _drawerItem(context, 'Order Now', '/OrderNow', FontAwesomeIcons.cartPlus),
-            _drawerItem(context, 'Contact Us', '/contactus', FontAwesomeIcons.phone),
-            _drawerItem(context, 'Notifications', '/notifications', FontAwesomeIcons.bell),
-            _drawerItem(context, 'Account', '/account', FontAwesomeIcons.user),
+            _drawerItem(
+                context, 'Home', '/landingpage', FontAwesomeIcons.house),
+            _drawerItem(
+                context, 'Order Now', '/OrderNow', FontAwesomeIcons.cartPlus),
+            _drawerItem(context, 'Notifications', '/notifications',
+                FontAwesomeIcons.bell),
+            _drawerItem(context, 'Account', '/profile', FontAwesomeIcons.user),
             ListTile(
               leading: const Icon(FontAwesomeIcons.arrowRightFromBracket, color: Colors.black),
               title: const Text('Logout', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
@@ -628,7 +631,7 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
                               // Loop through Dishes quantities to calculate total and selected dishes
                               quantities.forEach((name, quantity) {
                                 if (quantity > 0) {
-                                  selectedItems.add(name);  // Add dish, bilao, or dessert to selected list
+                                  selectedItems.add(name);
                                   String price = '';
 
                                   // Check if the item belongs to Dishes, Bilao, or Desserts
@@ -648,11 +651,11 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
                               // Create the order if items are selected
                               if (selectedItems.isNotEmpty) {
                                 final order = Order(
-                                  orderId: _generateOrderId(),  // Generate Order ID with leading zeros
+                                  orderId: _generateOrderId(),
                                   orderMethod: deliveryOption,
                                   orderPlaced: DateTime.now().toString(),
                                   amount: totalAmount,
-                                  status: 'Delivered',
+                                  status: 'Pending',
                                   dishes: selectedItems,
                                 );
 
@@ -662,17 +665,33 @@ class _OrdernowState extends State<Ordernow> with TickerProviderStateMixin {
                                 // Reset the quantities after placing the order
                                 setState(() {
                                   quantities.forEach((key, value) {
-                                    quantities[key] = 0;  // Reset all items to 0 after placing the order
+                                    quantities[key] = 0;  // Reset all items
                                   });
                                 });
 
-                                // Add the order to the global orderHistory list
-                                orderHistory.add(order);
 
-                                // Show "Order Placed" confirmation modal
+
+                                orders.add(order);
+                                // Show order placed modal
                                 _showOrderPlacedModal(context);
+
+
+                                Future.delayed(Duration(seconds: 10), () {
+                                  setState(() {
+                                    order.status = 'Delivered';
+
+                                    orders.remove(order);
+                                    orderHistory.add(order);
+                                  });
+
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => OrderHistory(orders: orderHistory),
+                                    ),
+                                  );
+                                });
                               } else {
-                                // Show a message if no items are selected
                                 _showCustomSnackBar('Please add items to your order.');
                               }
                             },
